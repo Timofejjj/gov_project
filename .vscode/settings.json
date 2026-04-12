@@ -1,4 +1,5 @@
 {
-  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+  // На Windows venv: .venv/Scripts/python.exe; на macOS/Linux: .venv/bin/python
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/Scripts/python.exe",
   "python.terminal.activateEnvironment": true
 }

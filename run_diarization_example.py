@@ -1,18 +1,31 @@
 """Пример: задайте ASSEMBLYAI_API_KEY. Запуск без аргументов открывает выбор аудио в системе.
 
 При передаче пути в командной строке диалог не показывается:
-  python3 run_diarization_example.py path/to/file.wav
+  python run_diarization_example.py path\\to\\file.wav
 
-Переносимый запуск (ищет .venv/venv, иначе python3 из PATH):
-  ./run_diarization_example.sh
-  PYTHON=/opt/homebrew/bin/python3.13 ./run_diarization_example.sh
+Переносимый запуск (ищет .venv/venv, иначе python из PATH):
 
-На macOS у Python из Homebrew часто нет модуля _tkinter; тогда используется системный
-диалог через osascript или запрос пути в терминале.
+  macOS/Linux:
+    ./run_diarization_example.sh
+    PYTHON=/opt/homebrew/bin/python3.13 ./run_diarization_example.sh
+
+  Windows (из каталога проекта):
+    run_diarization_example.bat
+    powershell -ExecutionPolicy Bypass -File .\\run_diarization_example.ps1
+    .venv\\Scripts\\python.exe run_diarization_example.py
+
+  Переменная PYTHON (полный путь к интерпретатору) поддерживается в .sh / .ps1 / .bat.
+
+  Первый запуск (langgraph, assemblyai и др.): install_requirements.bat или
+  install_requirements.ps1, либо: выбранный_python.exe -m pip install -r requirements.txt
+
+Если нет tkinter: на macOS используется osascript; на Windows — диалог через PowerShell
+(WinForms); иначе запрашивается путь в терминале.
 """
 
 from __future__ import annotations
 
+import base64
 import json
 import subprocess
 import sys
@@ -41,6 +54,40 @@ def _pick_audio_path_tkinter() -> str | None:
     )
     root.destroy()
     return path if path else None
+
+
+def _pick_audio_path_powershell() -> str | None:
+    """Нативный диалог выбора файла на Windows (без tkinter), через WinForms."""
+    ps = r"""
+Add-Type -AssemblyName System.Windows.Forms
+$d = New-Object System.Windows.Forms.OpenFileDialog
+$d.Title = 'Выберите аудиофайл'
+$d.Filter = 'Аудио|*.wav;*.mp3;*.m4a;*.flac;*.ogg;*.webm|WAV|*.wav|Все файлы|*.*'
+if ($d.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) {
+    [Console]::Out.Write($d.FileName)
+}
+""".strip()
+    enc = base64.b64encode(ps.encode("utf-16-le")).decode("ascii")
+    try:
+        proc = subprocess.run(
+            [
+                "powershell.exe",
+                "-NoProfile",
+                "-Sta",
+                "-EncodedCommand",
+                enc,
+            ],
+            capture_output=True,
+            text=True,
+            timeout=3600,
+            check=False,
+        )
+    except (FileNotFoundError, subprocess.TimeoutExpired):
+        return None
+    path = (proc.stdout or "").strip()
+    if proc.returncode != 0 or not path:
+        return None
+    return path
 
 
 def _pick_audio_path_applescript() -> str | None:
@@ -90,6 +137,11 @@ def pick_audio_path() -> str | None:
 
     if sys.platform == "darwin":
         path = _pick_audio_path_applescript()
+        if path:
+            return path
+
+    if sys.platform == "win32":
+        path = _pick_audio_path_powershell()
         if path:
             return path
 

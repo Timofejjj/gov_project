@@ -1,3 +1,5 @@
 langgraph>=0.2.55
 python-dotenv>=1.0.0
 assemblyai>=0.59.0
+# Python 3.13+: stdlib audioop removed (PEP 594); нужен для nodes.py (WAV → PCM)
+audioop-lts>=0.2.1; python_version>="3.13"
