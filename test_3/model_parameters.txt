@@ -1,0 +1,15 @@
+def _streaming_parameters() -> StreamingParameters:
+    return StreamingParameters(
+        sample_rate=16_000,
+        encoding=Encoding.pcm_s16le,
+        speech_model=SpeechModel.whisper_rt,
+        language_detection=False,
+        speaker_labels=True,
+        format_turns=True,
+
+        end_of_turn_confidence_threshold=0.3, -> ВОТ ЭТОТ ПАРАМЕТР ПОСТАВИЛ С 0.4 НА 0.3
+
+        vad_threshold=0.4,
+        min_turn_silence=400,
+        max_turn_silence=1280,
+    )

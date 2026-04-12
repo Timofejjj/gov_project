@@ -1,0 +1,167 @@
+
+--- utterances (speaker diarization) ---
+[
+  {
+    "speaker": "A",
+    "text": "Ты вообще живешь на свете подоверенностей. Не трожь собачку. Машина им жены, дача на мое имя, ничего у тебя нет. Ты голодранец.",
+    "confidence": 0.7604939,
+    "start": 31,
+    "end": 10471,
+    "words": [
+      {
+        "text": "Ты",
+        "start": 31,
+        "end": 391,
+        "confidence": 0.49243164,
+        "speaker": "A"
+      },
+      {
+        "text": "вообще",
+        "start": 391,
+        "end": 751,
+        "confidence": 0.73339844,
+        "speaker": "A"
+      },
+      {
+        "text": "живешь",
+        "start": 751,
+        "end": 1231,
+        "confidence": 0.88964844,
+        "speaker": "A"
+      },
+      {
+        "text": "на",
+        "start": 1231,
+        "end": 1431,
+        "confidence": 0.9042969,
+        "speaker": "A"
+      },
+      {
+        "text": "свете",
+        "start": 1431,
+        "end": 1711,
+        "confidence": 0.8322754,
+        "speaker": "A"
+      },
+      {
+        "text": "подоверенностей.",
+        "start": 1711,
+        "end": 2551,
+        "confidence": 0.664,
+        "speaker": "A"
+      },
+      {
+        "text": "Не",
+        "start": 3071,
+        "end": 3211,
+        "confidence": 0.2841797,
+        "speaker": "A"
+      },
+      {
+        "text": "трожь",
+        "start": 3211,
+        "end": 3471,
+        "confidence": 0.9396159,
+        "speaker": "A"
+      },
+      {
+        "text": "собачку.",
+        "start": 3471,
+        "end": 3951,
+        "confidence": 0.811,
+        "speaker": "A"
+      },
+      {
+        "text": "Машина",
+        "start": 5151,
+        "end": 5531,
+        "confidence": 0.8072917,
+        "speaker": "A"
+      },
+      {
+        "text": "им",
+        "start": 5531,
+        "end": 5751,
+        "confidence": 0.55322266,
+        "speaker": "A"
+      },
+      {
+        "text": "жены,",
+        "start": 5751,
+        "end": 6071,
+        "confidence": 0.796,
+        "speaker": "A"
+      },
+      {
+        "text": "дача",
+        "start": 6451,
+        "end": 6791,
+        "confidence": 0.8014323,
+        "speaker": "A"
+      },
+      {
+        "text": "на",
+        "start": 6791,
+        "end": 6851,
+        "confidence": 0.8881836,
+        "speaker": "A"
+      },
+      {
+        "text": "мое",
+        "start": 6851,
+        "end": 7051,
+        "confidence": 0.72094727,
+        "speaker": "A"
+      },
+      {
+        "text": "имя,",
+        "start": 7051,
+        "end": 7251,
+        "confidence": 0.662,
+        "speaker": "A"
+      },
+      {
+        "text": "ничего",
+        "start": 7351,
+        "end": 7711,
+        "confidence": 0.8510742,
+        "speaker": "A"
+      },
+      {
+        "text": "у",
+        "start": 7711,
+        "end": 8011,
+        "confidence": 0.8833008,
+        "speaker": "A"
+      },
+      {
+        "text": "тебя",
+        "start": 8011,
+        "end": 8211,
+        "confidence": 0.8828125,
+        "speaker": "A"
+      },
+      {
+        "text": "нет.",
+        "start": 8211,
+        "end": 8751,
+        "confidence": 0.883,
+        "speaker": "A"
+      },
+      {
+        "text": "Ты",
+        "start": 9311,
+        "end": 9631,
+        "confidence": 0.6977539,
+        "speaker": "A"
+      },
+      {
+        "text": "голодранец.",
+        "start": 9631,
+        "end": 10471,
+        "confidence": 0.753,
+        "speaker": "A"
+      }
+    ]
+  }
+]

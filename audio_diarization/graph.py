@@ -5,53 +5,37 @@ from typing import Literal
 
 from langgraph.graph import END, StateGraph
 
-from audio_diarization.nodes import (
-    fail_fast,
-    poll_once,
-    start_transcription,
-    upload_wav,
-    wait_between_polls,
-)
+from audio_diarization.nodes import fail_fast, transcribe_streaming
 from audio_diarization.state import DiarizationState
 
 
-def _after_poll(state: DiarizationState) -> Literal["done", "fail", "wait"]:
-    s = state.get("job_status", "")
-    if s == "completed":
-        return "done"
-    if s == "error":
+def _after_stream(state: DiarizationState) -> Literal["done", "fail"]:
+    if state.get("error"):
         return "fail"
-    return "wait"
+    return "done"
 
 
 def build_graph():
     g = StateGraph(DiarizationState)
-    g.add_node("upload_wav", upload_wav)
-    g.add_node("start_transcription", start_transcription)
-    g.add_node("poll_once", poll_once)
-    g.add_node("wait_between_polls", wait_between_polls)
+    g.add_node("transcribe_streaming", transcribe_streaming)
     g.add_node("fail_fast", fail_fast)
 
-    g.set_entry_point("upload_wav")
-    g.add_edge("upload_wav", "start_transcription")
-    g.add_edge("start_transcription", "poll_once")
+    g.set_entry_point("transcribe_streaming")
     g.add_conditional_edges(
-        "poll_once",
-        _after_poll,
+        "transcribe_streaming",
+        _after_stream,
         {
             "done": END,
             "fail": "fail_fast",
-            "wait": "wait_between_polls",
         },
     )
-    g.add_edge("wait_between_polls", "poll_once")
     g.add_edge("fail_fast", END)
 
     return g.compile()
 
 
 def run_diarization(local_wav_path: str) -> DiarizationState:
-    """Удобная обёртка: путь к WAV → финальное состояние графа."""
+    """Путь к WAV → PCM 16 kHz mono → AssemblyAI Streaming (Whisper RT) с параметрами UI."""
     if not os.path.isfile(local_wav_path):
         raise FileNotFoundError(local_wav_path)
     app = build_graph()

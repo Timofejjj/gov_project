@@ -1,0 +1,391 @@
+--- utterances (speaker diarization) ---
+[
+  {
+    "speaker": "A",
+    "text": "Что-то интересует? А вы, случайно, не говорите по-английски?",
+    "confidence": 0.7428977,
+    "start": 31,
+    "end": 3791,
+    "words": [
+      {
+        "text": "Что-то",
+        "start": 31,
+        "end": 191,
+        "confidence": 0.497,
+        "speaker": "A"
+      },
+      {
+        "text": "интересует?",
+        "start": 191,
+        "end": 691,
+        "confidence": 0.921,
+        "speaker": "A"
+      },
+      {
+        "text": "А",
+        "start": 891,
+        "end": 1151,
+        "confidence": 0.28515625,
+        "speaker": "A"
+      },
+      {
+        "text": "вы,",
+        "start": 1151,
+        "end": 1451,
+        "confidence": 0.601,
+        "speaker": "A"
+      },
+      {
+        "text": "случайно,",
+        "start": 1651,
+        "end": 2051,
+        "confidence": 0.934,
+        "speaker": "A"
+      },
+      {
+        "text": "не",
+        "start": 2131,
+        "end": 2291,
+        "confidence": 0.8930664,
+        "speaker": "A"
+      },
+      {
+        "text": "говорите",
+        "start": 2291,
+        "end": 2671,
+        "confidence": 0.907959,
+        "speaker": "A"
+      },
+      {
+        "text": "по-английски?",
+        "start": 2671,
+        "end": 3791,
+        "confidence": 0.904,
+        "speaker": "A"
+      }
+    ]
+  },
+  {
+    "speaker": "B",
+    "text": "Английский, китайский, французский, японский, какое угодно. Какая вас больше интересует?",
+    "confidence": 0.8378908,
+    "start": 4191,
+    "end": 8831,
+    "words": [
+      {
+        "text": "Английский,",
+        "start": 4191,
+        "end": 4791,
+        "confidence": 0.937,
+        "speaker": "B"
+      },
+      {
+        "text": "китайский,",
+        "start": 4931,
+        "end": 5371,
+        "confidence": 0.964,
+        "speaker": "B"
+      },
+      {
+        "text": "французский,",
+        "start": 5471,
+        "end": 6031,
+        "confidence": 0.96,
+        "speaker": "B"
+      },
+      {
+        "text": "японский,",
+        "start": 6151,
+        "end": 6631,
+        "confidence": 0.645,
+        "speaker": "B"
+      },
+      {
+        "text": "какое",
+        "start": 6711,
+        "end": 6991,
+        "confidence": 0.6772461,
+        "speaker": "B"
+      },
+      {
+        "text": "угодно.",
+        "start": 6991,
+        "end": 7371,
+        "confidence": 0.615,
+        "speaker": "B"
+      },
+      {
+        "text": "Какая",
+        "start": 7631,
+        "end": 7891,
+        "confidence": 0.8864746,
+        "speaker": "B"
+      },
+      {
+        "text": "вас",
+        "start": 7891,
+        "end": 8051,
+        "confidence": 0.87597656,
+        "speaker": "B"
+      },
+      {
+        "text": "больше",
+        "start": 8051,
+        "end": 8271,
+        "confidence": 0.86621094,
+        "speaker": "B"
+      },
+      {
+        "text": "интересует?",
+        "start": 8271,
+        "end": 8831,
+        "confidence": 0.952,
+        "speaker": "B"
+      }
+    ]
+  },
+  {
+    "speaker": "A",
+    "text": "Честно говоря, меня интересуете вы. Я работаю на модельное агентство в Париже, ищу будущих звезд модельного бизнеса. Хотите стать моделью в Париже?",
+    "confidence": 0.8896616,
+    "start": 9111,
+    "end": 17551,
+    "words": [
+      {
+        "text": "Честно",
+        "start": 9111,
+        "end": 9371,
+        "confidence": 0.95751953,
+        "speaker": "A"
+      },
+      {
+        "text": "говоря,",
+        "start": 9371,
+        "end": 9691,
+        "confidence": 0.899,
+        "speaker": "A"
+      },
+      {
+        "text": "меня",
+        "start": 10051,
+        "end": 10231,
+        "confidence": 0.7915039,
+        "speaker": "A"
+      },
+      {
+        "text": "интересуете",
+        "start": 10231,
+        "end": 10751,
+        "confidence": 0.8964844,
+        "speaker": "A"
+      },
+      {
+        "text": "вы.",
+        "start": 10751,
+        "end": 10951,
+        "confidence": 0.879,
+        "speaker": "A"
+      },
+      {
+        "text": "Я",
+        "start": 11371,
+        "end": 11511,
+        "confidence": 0.9067383,
+        "speaker": "A"
+      },
+      {
+        "text": "работаю",
+        "start": 11511,
+        "end": 11911,
+        "confidence": 0.88964844,
+        "speaker": "A"
+      },
+      {
+        "text": "на",
+        "start": 11911,
+        "end": 12051,
+        "confidence": 0.9160156,
+        "speaker": "A"
+      },
+      {
+        "text": "модельное",
+        "start": 12051,
+        "end": 12411,
+        "confidence": 0.8460286,
+        "speaker": "A"
+      },
+      {
+        "text": "агентство",
+        "start": 12411,
+        "end": 12831,
+        "confidence": 0.94055176,
+        "speaker": "A"
+      },
+      {
+        "text": "в",
+        "start": 12831,
+        "end": 12951,
+        "confidence": 0.90478516,
+        "speaker": "A"
+      },
+      {
+        "text": "Париже,",
+        "start": 12951,
+        "end": 13271,
+        "confidence": 0.71,
+        "speaker": "A"
+      },
+      {
+        "text": "ищу",
+        "start": 13491,
+        "end": 13771,
+        "confidence": 0.9742839,
+        "speaker": "A"
+      },
+      {
+        "text": "будущих",
+        "start": 13771,
+        "end": 14231,
+        "confidence": 0.94018555,
+        "speaker": "A"
+      },
+      {
+        "text": "звезд",
+        "start": 14231,
+        "end": 14571,
+        "confidence": 0.8483887,
+        "speaker": "A"
+      },
+      {
+        "text": "модельного",
+        "start": 14571,
+        "end": 15191,
+        "confidence": 0.9526367,
+        "speaker": "A"
+      },
+      {
+        "text": "бизнеса.",
+        "start": 15191,
+        "end": 15831,
+        "confidence": 0.902,
+        "speaker": "A"
+      },
+      {
+        "text": "Хотите",
+        "start": 15991,
+        "end": 16311,
+        "confidence": 0.876709,
+        "speaker": "A"
+      },
+      {
+        "text": "стать",
+        "start": 16311,
+        "end": 16591,
+        "confidence": 0.76708984,
+        "speaker": "A"
+      },
+      {
+        "text": "моделью",
+        "start": 16591,
+        "end": 17091,
+        "confidence": 0.96516925,
+        "speaker": "A"
+      },
+      {
+        "text": "в",
+        "start": 17091,
+        "end": 17231,
+        "confidence": 0.8618164,
+        "speaker": "A"
+      },
+      {
+        "text": "Париже?",
+        "start": 17231,
+        "end": 17551,
+        "confidence": 0.947,
+        "speaker": "A"
+      }
+    ]
+  },
+  {
+    "speaker": "B",
+    "text": "Я уже и так занята в Москве.",
+    "confidence": 0.86314344,
+    "start": 17751,
+    "end": 19711,
+    "words": [
+      {
+        "text": "Я",
+        "start": 17751,
+        "end": 17951,
+        "confidence": 0.89453125,
+        "speaker": "B"
+      },
+      {
+        "text": "уже",
+        "start": 17951,
+        "end": 18171,
+        "confidence": 0.80810547,
+        "speaker": "B"
+      },
+      {
+        "text": "и",
+        "start": 18171,
+        "end": 18371,
+        "confidence": 0.8857422,
+        "speaker": "B"
+      },
+      {
+        "text": "так",
+        "start": 18371,
+        "end": 18551,
+        "confidence": 0.80322266,
+        "speaker": "B"
+      },
+      {
+        "text": "занята",
+        "start": 18551,
+        "end": 18971,
+        "confidence": 0.8925781,
+        "speaker": "B"
+      },
+      {
+        "text": "в",
+        "start": 18971,
+        "end": 19231,
+        "confidence": 0.8198242,
+        "speaker": "B"
+      },
+      {
+        "text": "Москве.",
+        "start": 19231,
+        "end": 19711,
+        "confidence": 0.938,
+        "speaker": "B"
+      }
+    ]
+  },
+  {
+    "speaker": "A",
+    "text": "Торгуете куда?",
+    "confidence": 0.6872871,
+    "start": 19951,
+    "end": 20591,
+    "words": [
+      {
+        "text": "Торгуете",
+        "start": 19951,
+        "end": 20451,
+        "confidence": 0.9135742,
+        "speaker": "A"
+      },
+      {
+        "text": "куда?",
+        "start": 20451,
+        "end": 20591,
+        "confidence": 0.461,
+        "speaker": "A"
+      }
+    ]
+  }
+]

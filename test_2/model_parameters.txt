@@ -1,0 +1,21 @@
+Параметры модели (по настройкам интерфейса AssemblyAI на скриншоте)
+
+Модель
+  Whisper-Streaming — open-source Whisper на инфраструктуре AssemblyAI
+
+Язык
+  Russian
+
+Функции
+  Speaker diarization (диаризация спикеров): включено
+  Language detection (автоопределение языка): выключено
+  Format turns (форматирование реплик/смены реплик): включено
+  Medical mode (медицинский режим): выключено
+
+Пороги и тайминги
+  End of turn confidence threshold: 0.4
+  VAD (Voice Activity Detection) threshold: 0.4
+  Min turn silence: 400 ms
+  Max turn silence: 1280 ms
+
+Keyterm prompting (подсказка ключевых терминов) - не было
