@@ -1,0 +1,414 @@
+
+--- utterances (speaker diarization) ---
+[
+  {
+    "speaker": "A",
+    "text": "А вы будете наушники надевать? Нет. Или одевать. А не будете? Не буду. А так... Объясню, потому что я, честно говоря, впервые в подкасте. Так.",
+    "confidence": 0.9481188399999999,
+    "start": 50,
+    "end": 10890,
+    "words": [
+      {
+        "start": 50,
+        "end": 130,
+        "confidence": 0.916504,
+        "text": "А",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 130,
+        "end": 230,
+        "confidence": 0.996094,
+        "text": "вы",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 230,
+        "end": 430,
+        "confidence": 0.999023,
+        "text": "будете",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 430,
+        "end": 870,
+        "confidence": 0.997884,
+        "text": "наушники",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 870,
+        "end": 1250,
+        "confidence": 0.999023,
+        "text": "надевать?",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 1790,
+        "end": 2230,
+        "confidence": 0.991699,
+        "text": "Нет.",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 2590,
+        "end": 2730,
+        "confidence": 0.962402,
+        "text": "Или",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 2730,
+        "end": 3230,
+        "confidence": 0.949056,
+        "text": "одевать.",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 3710,
+        "end": 4150,
+        "confidence": 0.983887,
+        "text": "А",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 4150,
+        "end": 4270,
+        "confidence": 0.999023,
+        "text": "не",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 4270,
+        "end": 4470,
+        "confidence": 0.999023,
+        "text": "будете?",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 4630,
+        "end": 4830,
+        "confidence": 0.863281,
+        "text": "Не",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 4830,
+        "end": 5050,
+        "confidence": 0.999512,
+        "text": "буду.",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 5510,
+        "end": 5570,
+        "confidence": 0.938965,
+        "text": "А",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 5570,
+        "end": 5930,
+        "confidence": 0.377808,
+        "text": "так...",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 5930,
+        "end": 6450,
+        "confidence": 0.76535,
+        "text": "Объясню,",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 6690,
+        "end": 7390,
+        "confidence": 0.992676,
+        "text": "потому",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 7390,
+        "end": 7790,
+        "confidence": 1.0,
+        "text": "что",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 7790,
+        "end": 8990,
+        "confidence": 0.991211,
+        "text": "я,",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 9090,
+        "end": 9290,
+        "confidence": 0.999756,
+        "text": "честно",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 9290,
+        "end": 9530,
+        "confidence": 1.0,
+        "text": "говоря,",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 9690,
+        "end": 9990,
+        "confidence": 0.999674,
+        "text": "впервые",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 9990,
+        "end": 10090,
+        "confidence": 1.0,
+        "text": "в",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 10090,
+        "end": 10550,
+        "confidence": 0.999186,
+        "text": "подкасте.",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 10670,
+        "end": 10890,
+        "confidence": 0.981934,
+        "text": "Так.",
+        "word_is_final": true,
+        "speaker": "A"
+      }
+    ]
+  },
+  {
+    "speaker": "A",
+    "text": "вся моя жизнь устроена так, что я открываю для себя что-то новое всегда. И вот я решил открыть для себя волшебный мир подкаста.",
+    "confidence": 0.9721375833333333,
+    "start": 11780,
+    "end": 18280,
+    "words": [
+      {
+        "start": 11780,
+        "end": 12400,
+        "confidence": 0.355469,
+        "text": "вся",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 12400,
+        "end": 12560,
+        "confidence": 0.999512,
+        "text": "моя",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 12560,
+        "end": 12760,
+        "confidence": 1.0,
+        "text": "жизнь",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 12760,
+        "end": 13160,
+        "confidence": 0.997233,
+        "text": "устроена",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 13160,
+        "end": 13320,
+        "confidence": 1.0,
+        "text": "так,",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 13380,
+        "end": 13500,
+        "confidence": 0.999512,
+        "text": "что",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 13500,
+        "end": 13620,
+        "confidence": 1.0,
+        "text": "я",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 13620,
+        "end": 14040,
+        "confidence": 0.999512,
+        "text": "открываю",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 14040,
+        "end": 14140,
+        "confidence": 0.997559,
+        "text": "для",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 14140,
+        "end": 14280,
+        "confidence": 1.0,
+        "text": "себя",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 14280,
+        "end": 14440,
+        "confidence": 0.999512,
+        "text": "что",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 14440,
+        "end": 14560,
+        "confidence": 1.0,
+        "text": "-то",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 14560,
+        "end": 14820,
+        "confidence": 0.999023,
+        "text": "новое",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 14820,
+        "end": 15080,
+        "confidence": 0.995605,
+        "text": "всегда.",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 15520,
+        "end": 15920,
+        "confidence": 0.997559,
+        "text": "И",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 15920,
+        "end": 16320,
+        "confidence": 0.999512,
+        "text": "вот",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 16320,
+        "end": 16440,
+        "confidence": 0.999512,
+        "text": "я",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 16440,
+        "end": 16660,
+        "confidence": 0.997559,
+        "text": "решил",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 16660,
+        "end": 16940,
+        "confidence": 0.999756,
+        "text": "открыть",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 16940,
+        "end": 17000,
+        "confidence": 0.999512,
+        "text": "для",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 17000,
+        "end": 17180,
+        "confidence": 1.0,
+        "text": "себя",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 17180,
+        "end": 17640,
+        "confidence": 0.999512,
+        "text": "волшебный",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 17640,
+        "end": 17780,
+        "confidence": 1.0,
+        "text": "мир",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 17780,
+        "end": 18280,
+        "confidence": 0.995443,
+        "text": "подкаста.",
+        "word_is_final": true,
+        "speaker": "A"
+      }
+    ]
+  }
+]

@@ -1,0 +1,446 @@
+
+--- utterances (speaker diarization) ---
+[
+  {
+    "speaker": "",
+    "text": "Ты вообще живешь на свете по доверенности. Все, все так, не трожь собачку. Машин на им жены, дач на мое имя ничего у тебя нет.",
+    "confidence": 0.87497568,
+    "start": 200,
+    "end": 8580,
+    "words": [
+      {
+        "start": 200,
+        "end": 360,
+        "confidence": 0.53125,
+        "text": "Ты",
+        "word_is_final": true
+      },
+      {
+        "start": 360,
+        "end": 720,
+        "confidence": 0.757812,
+        "text": "вообще",
+        "word_is_final": true
+      },
+      {
+        "start": 720,
+        "end": 1200,
+        "confidence": 0.880859,
+        "text": "живешь",
+        "word_is_final": true
+      },
+      {
+        "start": 1200,
+        "end": 1380,
+        "confidence": 0.972656,
+        "text": "на",
+        "word_is_final": true
+      },
+      {
+        "start": 1380,
+        "end": 1700,
+        "confidence": 0.994385,
+        "text": "свете",
+        "word_is_final": true
+      },
+      {
+        "start": 1700,
+        "end": 1900,
+        "confidence": 0.831055,
+        "text": "по",
+        "word_is_final": true
+      },
+      {
+        "start": 1900,
+        "end": 2540,
+        "confidence": 0.992798,
+        "text": "доверенности.",
+        "word_is_final": true
+      },
+      {
+        "start": 2580,
+        "end": 2720,
+        "confidence": 0.59668,
+        "text": "Все,",
+        "word_is_final": true
+      },
+      {
+        "start": 2800,
+        "end": 2840,
+        "confidence": 0.680176,
+        "text": "все",
+        "word_is_final": true
+      },
+      {
+        "start": 2840,
+        "end": 2960,
+        "confidence": 0.679688,
+        "text": "так,",
+        "word_is_final": true
+      },
+      {
+        "start": 3100,
+        "end": 3200,
+        "confidence": 0.999512,
+        "text": "не",
+        "word_is_final": true
+      },
+      {
+        "start": 3200,
+        "end": 3500,
+        "confidence": 0.951335,
+        "text": "трожь",
+        "word_is_final": true
+      },
+      {
+        "start": 3500,
+        "end": 3900,
+        "confidence": 0.993327,
+        "text": "собачку.",
+        "word_is_final": true
+      },
+      {
+        "start": 5020,
+        "end": 5500,
+        "confidence": 0.936686,
+        "text": "Машин",
+        "word_is_final": true
+      },
+      {
+        "start": 5500,
+        "end": 5620,
+        "confidence": 0.857422,
+        "text": "на",
+        "word_is_final": true
+      },
+      {
+        "start": 5620,
+        "end": 5720,
+        "confidence": 0.687988,
+        "text": "им",
+        "word_is_final": true
+      },
+      {
+        "start": 5720,
+        "end": 6060,
+        "confidence": 0.973877,
+        "text": "жены,",
+        "word_is_final": true
+      },
+      {
+        "start": 6440,
+        "end": 6680,
+        "confidence": 0.979004,
+        "text": "дач",
+        "word_is_final": true
+      },
+      {
+        "start": 6680,
+        "end": 6820,
+        "confidence": 0.981934,
+        "text": "на",
+        "word_is_final": true
+      },
+      {
+        "start": 6820,
+        "end": 7040,
+        "confidence": 0.803223,
+        "text": "мое",
+        "word_is_final": true
+      },
+      {
+        "start": 7040,
+        "end": 7280,
+        "confidence": 0.897217,
+        "text": "имя",
+        "word_is_final": true
+      },
+      {
+        "start": 7280,
+        "end": 7680,
+        "confidence": 0.897461,
+        "text": "ничего",
+        "word_is_final": true
+      },
+      {
+        "start": 7680,
+        "end": 7960,
+        "confidence": 0.998047,
+        "text": "у",
+        "word_is_final": true
+      },
+      {
+        "start": 7960,
+        "end": 8180,
+        "confidence": 1.0,
+        "text": "тебя",
+        "word_is_final": true
+      },
+      {
+        "start": 8180,
+        "end": 8580,
+        "confidence": 1.0,
+        "text": "нет.",
+        "word_is_final": true
+      }
+    ]
+  },
+  {
+    "speaker": "A",
+    "text": "Ты вообще живешь на свете по доверенности. Все, все так, не трожь собачку. Машин на им жены, дач на мое имя ничего у тебя нет.",
+    "confidence": 0.87497568,
+    "start": 200,
+    "end": 8580,
+    "words": [
+      {
+        "start": 200,
+        "end": 360,
+        "confidence": 0.53125,
+        "text": "Ты",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 360,
+        "end": 720,
+        "confidence": 0.757812,
+        "text": "вообще",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 720,
+        "end": 1200,
+        "confidence": 0.880859,
+        "text": "живешь",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 1200,
+        "end": 1380,
+        "confidence": 0.972656,
+        "text": "на",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 1380,
+        "end": 1700,
+        "confidence": 0.994385,
+        "text": "свете",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 1700,
+        "end": 1900,
+        "confidence": 0.831055,
+        "text": "по",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 1900,
+        "end": 2540,
+        "confidence": 0.992798,
+        "text": "доверенности.",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 2580,
+        "end": 2720,
+        "confidence": 0.59668,
+        "text": "Все,",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 2800,
+        "end": 2840,
+        "confidence": 0.680176,
+        "text": "все",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 2840,
+        "end": 2960,
+        "confidence": 0.679688,
+        "text": "так,",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 3100,
+        "end": 3200,
+        "confidence": 0.999512,
+        "text": "не",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 3200,
+        "end": 3500,
+        "confidence": 0.951335,
+        "text": "трожь",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 3500,
+        "end": 3900,
+        "confidence": 0.993327,
+        "text": "собачку.",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 5020,
+        "end": 5500,
+        "confidence": 0.936686,
+        "text": "Машин",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 5500,
+        "end": 5620,
+        "confidence": 0.857422,
+        "text": "на",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 5620,
+        "end": 5720,
+        "confidence": 0.687988,
+        "text": "им",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 5720,
+        "end": 6060,
+        "confidence": 0.973877,
+        "text": "жены,",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 6440,
+        "end": 6680,
+        "confidence": 0.979004,
+        "text": "дач",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 6680,
+        "end": 6820,
+        "confidence": 0.981934,
+        "text": "на",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 6820,
+        "end": 7040,
+        "confidence": 0.803223,
+        "text": "мое",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 7040,
+        "end": 7280,
+        "confidence": 0.897217,
+        "text": "имя",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 7280,
+        "end": 7680,
+        "confidence": 0.897461,
+        "text": "ничего",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 7680,
+        "end": 7960,
+        "confidence": 0.998047,
+        "text": "у",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 7960,
+        "end": 8180,
+        "confidence": 1.0,
+        "text": "тебя",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 8180,
+        "end": 8580,
+        "confidence": 1.0,
+        "text": "нет.",
+        "word_is_final": true,
+        "speaker": "A"
+      }
+    ]
+  },
+  {
+    "speaker": "",
+    "text": "Ты квадранец!",
+    "confidence": 0.7672425,
+    "start": 9550,
+    "end": 10470,
+    "words": [
+      {
+        "start": 9550,
+        "end": 9670,
+        "confidence": 0.739258,
+        "text": "Ты",
+        "word_is_final": true
+      },
+      {
+        "start": 9670,
+        "end": 10470,
+        "confidence": 0.795227,
+        "text": "квадранец!",
+        "word_is_final": true
+      }
+    ]
+  },
+  {
+    "speaker": "A",
+    "text": "Ты квадранец!",
+    "confidence": 0.7672425,
+    "start": 9550,
+    "end": 10470,
+    "words": [
+      {
+        "start": 9550,
+        "end": 9670,
+        "confidence": 0.739258,
+        "text": "Ты",
+        "word_is_final": true,
+        "speaker": "A"
+      },
+      {
+        "start": 9670,
+        "end": 10470,
+        "confidence": 0.795227,
+        "text": "квадранец!",
+        "word_is_final": true,
+        "speaker": "A"
+      }
+    ]
+  }
+]
+MacBook-Pro-pro:gov_project pro$ 

@@ -18,5 +18,4 @@
   Min turn silence: 400 ms
   Max turn silence: 1280 ms
 
-Keyterm prompting (подсказка ключевых терминов)
-  Metoprolol, Dextroamphetamine, Toyota, Abercrombie and Fitch
+Keyterm prompting (подсказка ключевых терминов) - не было
