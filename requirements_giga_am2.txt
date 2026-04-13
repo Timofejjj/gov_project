@@ -1,0 +1,3 @@
+# Giga_AM2: WavLM (transformers) + кластеризация для диаризации; torch уже тянется из requirements_gigaam.txt
+transformers>=4.38.0
+scikit-learn>=1.3.0

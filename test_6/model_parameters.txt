@@ -1,0 +1,92 @@
+Параметры и архитектура пайплайна «Giga_AM» (локально: pyannote + GigaAM)
+================================================================================
+Источник логики: папка Giga_AM, скрипт run_transcribe.py (репозиторий Gov_pl_2).
+
+1. Общая схема
+---------------
+  [Аудиофайл] → ffmpeg/ffprobe (подготовка под pyannote)
+            → pyannote Pipeline (диаризация: кто когда говорил)
+            → сегменты по времени и меткам SPEAKER_*
+            → для каждого сегмента: нарезка waveform → моно → временный WAV → GigaAM.transcribe
+            → JSON в transcribed_text.txt (speaker A, B, …) + model_parameters / info
+
+2. ASR (распознавание речи) — GigaAM
+-------------------------------------
+  Пакет: gigaam (установка из GitHub, см. requirements_gigaam.txt).
+  Загрузка модели: gigaam.load_model(...)
+    • Имя по умолчанию в CLI: e2e_rnnt → разворачивается в v3_e2e_rnnt (короткие имена: ctc, rnnt, e2e_ctc, e2e_rnnt, ssl).
+    • Устройство по умолчанию: cpu; fp16_encoder выключается на CPU.
+    • use_flash=False.
+  Вызов распознавания: model.transcribe(path_to_wav, word_timestamps=…).
+  Ограничение длины одного вызова transcribe в GigaAM: порядка ~25 с; в скрипте длинные реплики режутся чанками:
+    MAX_ASR_CHUNK_SEC = 20.0
+  Минимальная длительность сегмента диаризации, ниже которой сегмент пропускается:
+    MIN_SEGMENT_SEC = 0.12
+  Частота дискретизации для WAV, который читает GigaAM: 16 kHz (как в gigaam.preprocess.SAMPLE_RATE).
+
+3. Диаризация — pyannote.audio 4.x (Hugging Face)
+---------------------------------------------------
+  Пакет: pyannote.audio (см. requirements_pyannote.txt).
+  Доступ к весам: HF_TOKEN / HUGGING_FACE_HUB_TOKEN / HF_ACCESS_TOKEN (в т.ч. из .env через python-dotenv).
+  Нужно принять условия (gated) на Hugging Face для:
+    • pyannote/speaker-diarization-3.1 и/или pyannote/speaker-diarization-community-1
+    • pyannote/segmentation-3.0 (подгружается пайплайном)
+    • при необходимости — pyannote/wespeaker-voxceleb-resnet34-LM и др. зависимости конкретного чекпоинта
+
+  Порядок выбора пайплайна (если не задан --pyannote-model):
+    1) pyannote/speaker-diarization-3.1
+    2) pyannote/speaker-diarization-community-1
+
+  Вызов:
+    Pipeline.from_pretrained(model_id, token=hf_token)
+    pipeline.to(torch.device(device))
+    output = pipeline({"uri": "recording", "waveform": wf, "sample_rate": sample_rate})
+
+  Тип результата: DiarizeOutput (pyannote 4). Из него извлекается Annotation (разметка спикеров), приоритет полей:
+    exclusive_speaker_diarization → speaker_diarization → diarization → annotation
+  Итерация по сегментам:
+    for segment, _, label in annotation.itertracks(yield_label=True):
+        (start_sec, end_sec, label)  # label вида SPEAKER_00, …
+
+  Маппинг на «Спикер A/B»: по хронологии первого появления метки pyannote (A — первый встретившийся кластер).
+
+4. Подготовка аудио под pyannote (без принудительного моно)
+-------------------------------------------------------------
+  Константа: SAMPLE_RATE = 16000
+
+  ffprobe: число каналов первого аудиопотока (a:0), поле stream=channels.
+
+  ffmpeg (сырой PCM s16le на stdout):
+    • -ar 16000 -f s16le -acodec pcm_s16le
+    • если каналов ≥ 2: добавляется -ac 2 (стерео; при >2 каналов — сведение в stereo, не в моно)
+    • если 1 канал: без -ac (остаётся моно)
+
+  В памяти: torch.Tensor формы (channel, time), float32 в диапазоне ~[-1, 1] после деления int16 на 32768.
+  Для стерео: чередование LRLR… разворачивается в матрицу (2, num_samples).
+
+5. Подготовка сегментов под GigaAM (моно)
+-----------------------------------------
+  После нарезки сегмента из общего waveform для transcribe:
+    если channel > 1: seg = mean по каналам → форма (1, time)
+  Временный файл: моно PCM16 WAV через стандартный модуль wave (без torchaudio.save — совместимость с Windows).
+
+6. CLI (основные флаги run_transcribe.py)
+-----------------------------------------
+  Позиционный аргумент: путь к аудио (или диалог без аргумента).
+  --model …          имя GigaAM для load_model (по умолчанию e2e_rnnt)
+  --out-dir …        каталог для txt (по умолчанию Giga_AM/)
+  --device cpu|cuda
+  --no-word-timestamps
+  --no-diarize       только один проход ASR без pyannote
+  --pyannote-model … принудительный ID модели на HF
+
+7. Зависимости окружения
+------------------------
+  ffmpeg и ffprobe в PATH.
+  Python-пакеты: см. requirements.txt, requirements_gigaam.txt, requirements_pyannote.txt;
+  установка через install_requirements.ps1 / install_requirements.bat.
+
+8. Примечание про этот каталог test_6
+-------------------------------------
+  Аудио: 2_Speakers_03 (mp3cut.net).wav — тот же сценарий «два спикера», что и в смежных тестах;
+  данный файл фиксирует параметры пайплайна Giga_AM/pyannote для воспроизводимости отчёта.

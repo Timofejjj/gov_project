@@ -16,8 +16,10 @@
 
   Переменная PYTHON (полный путь к интерпретатору) поддерживается в .sh / .ps1 / .bat.
 
-  Первый запуск (langgraph, assemblyai и др.): install_requirements.bat или
-  install_requirements.ps1, либо: выбранный_python.exe -m pip install -r requirements.txt
+  Первый запуск (langgraph, assemblyai, GigaAM и др.): install_requirements.bat или
+  install_requirements.ps1 (ставит requirements*.txt в .venv, включая GigaAM и pyannote).
+
+  Локальная транскрипция GigaAM + диаризация A/B (нужен HF_TOKEN): Giga_AM/run_transcribe.py
 
 Если нет tkinter: на macOS используется osascript; на Windows — диалог через PowerShell
 (WinForms); иначе запрашивается путь в терминале.

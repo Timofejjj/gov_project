@@ -1,0 +1,4 @@
+# Диаризация спикеров для Giga_AM/run_transcribe.py (pyannote + torchcodec; на Windows
+# чтение файла идёт через torchaudio в скрипте, см. run_transcribe.py).
+# Нужен HF_TOKEN / HUGGING_FACE_HUB_TOKEN и принятие условий на странице модели на HuggingFace.
+pyannote.audio>=4.0,<5

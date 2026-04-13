@@ -1,0 +1,3 @@
+# Локальное ASR (GigaAM + PyTorch). Ставится вторым шагом install_requirements.*
+# Требуется Python >= 3.10 и ffmpeg в PATH.
+gigaam[torch] @ git+https://github.com/salute-developers/GigaAM.git

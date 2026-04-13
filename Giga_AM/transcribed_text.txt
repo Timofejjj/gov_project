@@ -1,0 +1,394 @@
+
+--- utterances (GigaAM + pyannote: спикеры A, B, …) ---
+[
+  {
+    "speaker": "A",
+    "text": "Что-то интересует? А вы случайно не говорите?",
+    "confidence": null,
+    "start": 71,
+    "end": 3001,
+    "words": [
+      {
+        "text": "Что-то",
+        "start": 71,
+        "end": 232,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "интересует?",
+        "start": 312,
+        "end": 834,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "А",
+        "start": 1074,
+        "end": 1115,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "вы",
+        "start": 1315,
+        "end": 1355,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "случайно",
+        "start": 1516,
+        "end": 1957,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "не",
+        "start": 2158,
+        "end": 2198,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "говорите?",
+        "start": 2319,
+        "end": 3001,
+        "confidence": null,
+        "speaker": "A"
+      }
+    ]
+  },
+  {
+    "speaker": "A",
+    "text": "По-английски.",
+    "confidence": null,
+    "start": 3305,
+    "end": 3862,
+    "words": [
+      {
+        "text": "По-английски.",
+        "start": 3305,
+        "end": 3862,
+        "confidence": null,
+        "speaker": "A"
+      }
+    ]
+  },
+  {
+    "speaker": "B",
+    "text": "Английский, китайский, французский, японский, какой угодно, какая вас больше интересует?",
+    "confidence": null,
+    "start": 4269,
+    "end": 8884,
+    "words": [
+      {
+        "text": "Английский,",
+        "start": 4269,
+        "end": 4831,
+        "confidence": null,
+        "speaker": "B"
+      },
+      {
+        "text": "китайский,",
+        "start": 4911,
+        "end": 5393,
+        "confidence": null,
+        "speaker": "B"
+      },
+      {
+        "text": "французский,",
+        "start": 5473,
+        "end": 6075,
+        "confidence": null,
+        "speaker": "B"
+      },
+      {
+        "text": "японский,",
+        "start": 6195,
+        "end": 6717,
+        "confidence": null,
+        "speaker": "B"
+      },
+      {
+        "text": "какой",
+        "start": 6797,
+        "end": 6837,
+        "confidence": null,
+        "speaker": "B"
+      },
+      {
+        "text": "угодно,",
+        "start": 7078,
+        "end": 7560,
+        "confidence": null,
+        "speaker": "B"
+      },
+      {
+        "text": "какая",
+        "start": 7680,
+        "end": 7720,
+        "confidence": null,
+        "speaker": "B"
+      },
+      {
+        "text": "вас",
+        "start": 7921,
+        "end": 7961,
+        "confidence": null,
+        "speaker": "B"
+      },
+      {
+        "text": "больше",
+        "start": 8121,
+        "end": 8162,
+        "confidence": null,
+        "speaker": "B"
+      },
+      {
+        "text": "интересует?",
+        "start": 8362,
+        "end": 8884,
+        "confidence": null,
+        "speaker": "B"
+      }
+    ]
+  },
+  {
+    "speaker": "C",
+    "text": "Честно говоря, меня интересуете вы. Я работаю на модное агентство в Париже, ищу будущих звёзд модельного бизнеса. Хотите стать моделью в Париже?",
+    "confidence": null,
+    "start": 9156,
+    "end": 17659,
+    "words": [
+      {
+        "text": "Честно",
+        "start": 9156,
+        "end": 9395,
+        "confidence": null,
+        "speaker": "C"
+      },
+      {
+        "text": "говоря,",
+        "start": 9515,
+        "end": 9755,
+        "confidence": null,
+        "speaker": "C"
+      },
+      {
+        "text": "меня",
+        "start": 10034,
+        "end": 10074,
+        "confidence": null,
+        "speaker": "C"
+      },
+      {
+        "text": "интересуете",
+        "start": 10274,
+        "end": 10753,
+        "confidence": null,
+        "speaker": "C"
+      },
+      {
+        "text": "вы.",
+        "start": 10872,
+        "end": 11152,
+        "confidence": null,
+        "speaker": "C"
+      },
+      {
+        "text": "Я",
+        "start": 11391,
+        "end": 11431,
+        "confidence": null,
+        "speaker": "C"
+      },
+      {
+        "text": "работаю",
+        "start": 11511,
+        "end": 11791,
+        "confidence": null,
+        "speaker": "C"
+      },
+      {
+        "text": "на",
+        "start": 11910,
+        "end": 11950,
+        "confidence": null,
+        "speaker": "C"
+      },
+      {
+        "text": "модное",
+        "start": 12030,
+        "end": 12350,
+        "confidence": null,
+        "speaker": "C"
+      },
+      {
+        "text": "агентство",
+        "start": 12429,
+        "end": 12749,
+        "confidence": null,
+        "speaker": "C"
+      },
+      {
+        "text": "в",
+        "start": 12869,
+        "end": 12908,
+        "confidence": null,
+        "speaker": "C"
+      },
+      {
+        "text": "Париже,",
+        "start": 12948,
+        "end": 13427,
+        "confidence": null,
+        "speaker": "C"
+      },
+      {
+        "text": "ищу",
+        "start": 13507,
+        "end": 13747,
+        "confidence": null,
+        "speaker": "C"
+      },
+      {
+        "text": "будущих",
+        "start": 13827,
+        "end": 14186,
+        "confidence": null,
+        "speaker": "C"
+      },
+      {
+        "text": "звёзд",
+        "start": 14266,
+        "end": 14585,
+        "confidence": null,
+        "speaker": "C"
+      },
+      {
+        "text": "модельного",
+        "start": 14665,
+        "end": 15104,
+        "confidence": null,
+        "speaker": "C"
+      },
+      {
+        "text": "бизнеса.",
+        "start": 15264,
+        "end": 15823,
+        "confidence": null,
+        "speaker": "C"
+      },
+      {
+        "text": "Хотите",
+        "start": 15982,
+        "end": 16262,
+        "confidence": null,
+        "speaker": "C"
+      },
+      {
+        "text": "стать",
+        "start": 16342,
+        "end": 16541,
+        "confidence": null,
+        "speaker": "C"
+      },
+      {
+        "text": "моделью",
+        "start": 16621,
+        "end": 16981,
+        "confidence": null,
+        "speaker": "C"
+      },
+      {
+        "text": "в",
+        "start": 17100,
+        "end": 17140,
+        "confidence": null,
+        "speaker": "C"
+      },
+      {
+        "text": "Париже?",
+        "start": 17220,
+        "end": 17659,
+        "confidence": null,
+        "speaker": "C"
+      }
+    ]
+  },
+  {
+    "speaker": "D",
+    "text": "Я уже и так занята в Москве.",
+    "confidence": null,
+    "start": 17870,
+    "end": 19678,
+    "words": [
+      {
+        "text": "Я",
+        "start": 17870,
+        "end": 17910,
+        "confidence": null,
+        "speaker": "D"
+      },
+      {
+        "text": "уже",
+        "start": 17991,
+        "end": 18031,
+        "confidence": null,
+        "speaker": "D"
+      },
+      {
+        "text": "и",
+        "start": 18232,
+        "end": 18272,
+        "confidence": null,
+        "speaker": "D"
+      },
+      {
+        "text": "так",
+        "start": 18392,
+        "end": 18432,
+        "confidence": null,
+        "speaker": "D"
+      },
+      {
+        "text": "занята",
+        "start": 18593,
+        "end": 18914,
+        "confidence": null,
+        "speaker": "D"
+      },
+      {
+        "text": "в",
+        "start": 19155,
+        "end": 19196,
+        "confidence": null,
+        "speaker": "D"
+      },
+      {
+        "text": "Москве.",
+        "start": 19316,
+        "end": 19678,
+        "confidence": null,
+        "speaker": "D"
+      }
+    ]
+  },
+  {
+    "speaker": "C",
+    "text": "Торгуете.",
+    "confidence": null,
+    "start": 20018,
+    "end": 20550,
+    "words": [
+      {
+        "text": "Торгуете.",
+        "start": 20018,
+        "end": 20550,
+        "confidence": null,
+        "speaker": "C"
+      }
+    ]
+  }
+]
