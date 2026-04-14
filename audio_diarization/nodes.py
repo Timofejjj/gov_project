@@ -38,7 +38,8 @@ def _load_project_dotenv() -> None:
     except ImportError:
         pass
     try:
-        raw = path.read_text(encoding="utf-8")
+        # utf-8-sig: если .env сохранён с BOM, первая строка всё равно распарсится как ключ.
+        raw = path.read_text(encoding="utf-8-sig")
     except OSError:
         return
     for line in raw.splitlines():
@@ -49,8 +50,13 @@ def _load_project_dotenv() -> None:
             continue
         key, _, val = line.partition("=")
         key, val = key.strip(), val.strip().strip('"').strip("'")
-        if key:
-            os.environ.setdefault(key, val)
+        if not key:
+            continue
+        # Пустая переменная в окружении (часто из профиля/IDE) не даёт подставить .env при
+        # load_dotenv(override=False) и setdefault — подставляем значение из файла.
+        existing = os.environ.get(key)
+        if existing is None or not str(existing).strip():
+            os.environ[key] = val
 
 
 _load_project_dotenv()

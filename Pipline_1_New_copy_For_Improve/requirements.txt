@@ -1,0 +1,3 @@
+# Дополнительно к корневому окружению (gigaam, pyannote.audio, torch — см. ..\requirements_gigaam.txt и ..\requirements_pyannote.txt)
+speechbrain>=1.0.0
+hdbscan>=0.8.33

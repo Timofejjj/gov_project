@@ -1,0 +1,629 @@
+
+--- utterances (GigaAM + pyannote: спикеры A, B, …) ---
+[
+  {
+    "speaker": "A",
+    "text": "Как ты думаешь, сколько дней тыске?",
+    "confidence": null,
+    "start": 80,
+    "end": 2073,
+    "words": [
+      {
+        "text": "Как",
+        "start": 80,
+        "end": 120,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "ты",
+        "start": 239,
+        "end": 279,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "думаешь,",
+        "start": 399,
+        "end": 718,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "сколько",
+        "start": 837,
+        "end": 877,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "дней",
+        "start": 1116,
+        "end": 1276,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "тыске?",
+        "start": 1395,
+        "end": 2073,
+        "confidence": null,
+        "speaker": "A"
+      }
+    ]
+  },
+  {
+    "speaker": "A",
+    "text": "— Да не так! — Учись! — Сколько дней этой треске? — Один, сегодня привезли. — Очень сложное искусство. — Смотри внимательно. — Сколько, сколько? — Да день, говорю. — Смотри, губы поджал.",
+    "confidence": null,
+    "start": 2860,
+    "end": 13571,
+    "words": [
+      {
+        "text": "—",
+        "start": 2860,
+        "end": 2900,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "Да",
+        "start": 2980,
+        "end": 3020,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "не",
+        "start": 3179,
+        "end": 3219,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "так!",
+        "start": 3499,
+        "end": 4099,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "—",
+        "start": 4259,
+        "end": 4299,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "Учись!",
+        "start": 4498,
+        "end": 5138,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "—",
+        "start": 5178,
+        "end": 5218,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "Сколько",
+        "start": 5338,
+        "end": 5378,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "дней",
+        "start": 5657,
+        "end": 5897,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "этой",
+        "start": 5977,
+        "end": 6097,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "треске?",
+        "start": 6177,
+        "end": 6657,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "—",
+        "start": 6657,
+        "end": 6697,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "Один,",
+        "start": 6856,
+        "end": 7256,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "сегодня",
+        "start": 7336,
+        "end": 7376,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "привезли.",
+        "start": 7656,
+        "end": 8055,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "—",
+        "start": 8135,
+        "end": 8175,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "Очень",
+        "start": 8215,
+        "end": 8375,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "сложное",
+        "start": 8415,
+        "end": 8655,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "искусство.",
+        "start": 8775,
+        "end": 9175,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "—",
+        "start": 9215,
+        "end": 9254,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "Смотри",
+        "start": 9294,
+        "end": 9494,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "внимательно.",
+        "start": 9614,
+        "end": 10294,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "—",
+        "start": 10414,
+        "end": 10454,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "Сколько,",
+        "start": 10533,
+        "end": 10853,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "сколько?",
+        "start": 10933,
+        "end": 11173,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "—",
+        "start": 11213,
+        "end": 11253,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "Да",
+        "start": 11333,
+        "end": 11373,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "день,",
+        "start": 11533,
+        "end": 11772,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "говорю.",
+        "start": 11812,
+        "end": 12092,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "—",
+        "start": 12172,
+        "end": 12212,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "Смотри,",
+        "start": 12332,
+        "end": 12612,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "губы",
+        "start": 12692,
+        "end": 12892,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "поджал.",
+        "start": 13051,
+        "end": 13571,
+        "confidence": null,
+        "speaker": "A"
+      }
+    ]
+  },
+  {
+    "speaker": "B",
+    "text": "А это значит, что рыбе не менее",
+    "confidence": null,
+    "start": 13531,
+    "end": 14846,
+    "words": [
+      {
+        "text": "А",
+        "start": 13531,
+        "end": 13571,
+        "confidence": null,
+        "speaker": "B"
+      },
+      {
+        "text": "это",
+        "start": 13690,
+        "end": 13730,
+        "confidence": null,
+        "speaker": "B"
+      },
+      {
+        "text": "значит,",
+        "start": 13850,
+        "end": 14049,
+        "confidence": null,
+        "speaker": "B"
+      },
+      {
+        "text": "что",
+        "start": 14089,
+        "end": 14129,
+        "confidence": null,
+        "speaker": "B"
+      },
+      {
+        "text": "рыбе",
+        "start": 14248,
+        "end": 14408,
+        "confidence": null,
+        "speaker": "B"
+      },
+      {
+        "text": "не",
+        "start": 14527,
+        "end": 14567,
+        "confidence": null,
+        "speaker": "B"
+      },
+      {
+        "text": "менее",
+        "start": 14647,
+        "end": 14846,
+        "confidence": null,
+        "speaker": "B"
+      }
+    ]
+  },
+  {
+    "speaker": "A",
+    "text": "..трёх дней. Максимум два. О, нос почесал. Рыбе не меньше пяти дней. Да ещё её замораживали.",
+    "confidence": null,
+    "start": 14965,
+    "end": 21810,
+    "words": [
+      {
+        "text": "...трёх",
+        "start": 14965,
+        "end": 15326,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "дней.",
+        "start": 15366,
+        "end": 15646,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "Максимум",
+        "start": 16246,
+        "end": 16607,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "два.",
+        "start": 16727,
+        "end": 17007,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "О,",
+        "start": 17167,
+        "end": 17327,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "нос",
+        "start": 17527,
+        "end": 17727,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "почесал.",
+        "start": 17847,
+        "end": 18408,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "Рыбе",
+        "start": 18528,
+        "end": 18688,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "не",
+        "start": 18808,
+        "end": 18848,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "меньше",
+        "start": 18928,
+        "end": 19168,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "пяти",
+        "start": 19288,
+        "end": 19529,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "дней.",
+        "start": 19649,
+        "end": 20009,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "Да",
+        "start": 20289,
+        "end": 20329,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "ещё",
+        "start": 20409,
+        "end": 20449,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "её",
+        "start": 20649,
+        "end": 20689,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "замораживали.",
+        "start": 20890,
+        "end": 21810,
+        "confidence": null,
+        "speaker": "A"
+      }
+    ]
+  },
+  {
+    "speaker": "B",
+    "text": "А вот тут я с вами согласна.",
+    "confidence": null,
+    "start": 21918,
+    "end": 23308,
+    "words": [
+      {
+        "text": "А",
+        "start": 21918,
+        "end": 21957,
+        "confidence": null,
+        "speaker": "B"
+      },
+      {
+        "text": "вот",
+        "start": 22037,
+        "end": 22076,
+        "confidence": null,
+        "speaker": "B"
+      },
+      {
+        "text": "тут",
+        "start": 22196,
+        "end": 22235,
+        "confidence": null,
+        "speaker": "B"
+      },
+      {
+        "text": "я",
+        "start": 22394,
+        "end": 22434,
+        "confidence": null,
+        "speaker": "B"
+      },
+      {
+        "text": "с",
+        "start": 22513,
+        "end": 22553,
+        "confidence": null,
+        "speaker": "B"
+      },
+      {
+        "text": "вами",
+        "start": 22593,
+        "end": 22712,
+        "confidence": null,
+        "speaker": "B"
+      },
+      {
+        "text": "согласна.",
+        "start": 22831,
+        "end": 23308,
+        "confidence": null,
+        "speaker": "B"
+      }
+    ]
+  },
+  {
+    "speaker": "A",
+    "text": "Пять дней.",
+    "confidence": null,
+    "start": 23739,
+    "end": 24164,
+    "words": [
+      {
+        "text": "Пять",
+        "start": 23739,
+        "end": 23893,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "дней.",
+        "start": 23932,
+        "end": 24164,
+        "confidence": null,
+        "speaker": "A"
+      }
+    ]
+  },
+  {
+    "speaker": "B",
+    "text": "Да.",
+    "confidence": null,
+    "start": 24577,
+    "end": 24785,
+    "words": [
+      {
+        "text": "Да.",
+        "start": 24577,
+        "end": 24785,
+        "confidence": null,
+        "speaker": "B"
+      }
+    ]
+  },
+  {
+    "speaker": "A",
+    "text": "Ну, для вашего ресторана это как раз",
+    "confidence": null,
+    "start": 24945,
+    "end": 26559,
+    "words": [
+      {
+        "text": "Ну,",
+        "start": 24945,
+        "end": 25066,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "для",
+        "start": 25187,
+        "end": 25228,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "вашего",
+        "start": 25349,
+        "end": 25591,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "ресторана",
+        "start": 25671,
+        "end": 26075,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "это",
+        "start": 26196,
+        "end": 26236,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "как",
+        "start": 26357,
+        "end": 26398,
+        "confidence": null,
+        "speaker": "A"
+      },
+      {
+        "text": "раз",
+        "start": 26519,
+        "end": 26559,
+        "confidence": null,
+        "speaker": "A"
+      }
+    ]
+  }
+]

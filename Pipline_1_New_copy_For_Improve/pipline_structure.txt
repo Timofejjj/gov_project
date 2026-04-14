@@ -1,0 +1,15 @@
+в папке Pipline_1_New Собери РАБОЧИЙ пайплан для дирилизации Вот схема пайплайна: audio 
+↓ 
+(1) VAD → Silero VAD / pyannote VAD 
+↓ 
+(2) segmentation → pyannote segmentation-3.0 
+↓ 
+(3) chunking → rule-based (разрез по таймкодам) 
+↓ 
+(4) speaker embedding → ECAPA-TDNN (SpeechBrain) [лучший вариант] 
+↓ 
+(5) clustering → HDBSCAN (или Agglomerative) 
+↓ 
+(6) refinement → pyannote resegmentation (optional) 
+↓ 
+(7) ASR (GigaAM) ↓ output: text + speaker labels
