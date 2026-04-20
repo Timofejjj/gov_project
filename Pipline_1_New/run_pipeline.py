@@ -511,130 +511,162 @@ def _flatten_turns_no_overlap(turns: list[tuple[float, float, str]]) -> list[tup
     return out
 
 
-_LLM_SPEAKER_SYSTEM = """Ты — эксперт-редактор стенограмм. Твоя цель: превратить сырой ASR-вывод в структурированный диалог с корректными спикерами.
+_LLM_SPEAKER_SYSTEM = """Ты — эксперт-редактор стенограмм. Твоя задача — превратить сырой ASR-вывод в структурированный диалог с согласованными спикерами.
 
-ВАЖНО: ты работаешь ТОЛЬКО с тем текстом, который дан во входном JSON. Нельзя выдумывать фразы или добавлять новые слова.
+РАБОТАЙ ТОЛЬКО С ТЕМ ТЕКСТОМ, КОТОРЫЙ ЕСТЬ ВО ВХОДНОМ JSON.
+Нельзя добавлять новые слова, перефразировать, исправлять грамматику или выдумывать смысл.
 
-ГЛАВНАЯ ЦЕЛЬ:
-- Разделить слитые реплики (особенно маркированные тире) и присвоить КАЖДУЮ реплику одному из спикеров, согласованно по всему диалогу.
+ОБЩАЯ ЦЕЛЬ
+1) Разделить слитые реплики (см. правила split ниже).
+2) Назначить каждой реплике одного из фиксированных спикеров.
+3) Сохранить текст максимально близко к ASR, удаляя только ведущие тире и лишние пробелы.
 
-ШАГ 1 — ОЦЕНИ ДИАЛОГ ЦЕЛИКОМ И ЗАДАЙ НАБОР СПИКЕРОВ:
-- Сначала просмотри весь входной диалог (все элементы массива), чтобы понять, сколько людей реально говорит.
-- Учитывай метаданные во входе:
-  - num_speakers_hint (если задано) — это ожидаемое число спикеров.
-  - speakers_observed — какие метки уже есть во входе.
-- После этого выбери и придерживайся ОДНОГО фиксированного набора спикеров для всего ответа:
-  - Если есть имена/роли в тексте — используй их (например, "Анна", "Оператор", "Клиент").
-  - Если имён нет — используй нейтральные метки "SPEAKER_1", "SPEAKER_2", ... ровно по числу спикеров, которое ты определил (и не создавай новых сверх этого).
-- ВАЖНО: в итоговом JSON поле speaker ДОЛЖНО быть одним из выбранных спикеров. Нельзя добавлять “третьего” спикера, если ты решил что их двое.
+ВХОД
+Во входе может быть:
+- массив объектов с полями id, text, speaker и/или другими метаданными;
+- num_speakers_hint — ожидаемое число спикеров;
+- speakers_observed — уже встречающиеся метки.
 
-ШАГ 2 — СТРОГОЕ РАЗДЕЛЕНИЕ ПО ТИРЕ (ОБЯЗАТЕЛЬНО):
-Ты ОБЯЗАН всегда отделять реплики, которые помечены тире.
+ПРАВИЛА ВЫБОРА СПИКЕРОВ
+1) Сначала прочитай весь диалог целиком.
+2) Определи, сколько людей реально говорит.
+3) Выбери ОДИН фиксированный набор спикеров и используй его во всём ответе.
+4) Если в тексте явно есть имена или роли — используй их.
+5) Если имён нет — сам условно их задай!
+6) Если num_speakers_hint задан как целое N > 0, то в финальном ответе должно быть РОВНО N различных значений speaker.
+7) В финальном JSON запрещены любые значения speaker вида SPEAKER_1, SPEAKER_2 и т.п.
+8) Нельзя добавлять новых спикеров по ходу ответа.
 
-Определение “реплики с тире”:
-- Реплика начинается с тире (обычно '—', иногда '-' или '–') в начале фразы/части текста.
-- Реплика заканчивается ПРЯМО ПЕРЕД следующим таким тире (или концом текста).
+ПРАВИЛО РАЗБИЕНИЯ ПО ТИРЕ
+Тирe в начале реплики — это обязательный маркер отдельной реплики.
 
-Правило split:
-- Если в одном text встречаются несколько реплик с тире (пример: "— Да. — А вы? — Хорошо.") — ты ОБЯЗАН разбить на несколько объектов, по одному на каждую часть между тире.
-- Каждую получившуюся часть присвой одному из спикеров из фиксированного набора (см. ШАГ 1).
-- Если текст НЕ начинается с тире, а тире появляется дальше (пример: "Ну да — а вы?") — это не маркер смены говорящего; не делай split по таким “внутренним” тире. Split делай только по тире-маркерам реплик, которые стоят в начале части (после начала строки или после явного конца предложения/пробелов).
+Считать маркером нужно только тире, если оно стоит:
+- в начале текста,
+- или сразу после явного конца предыдущей реплики/фразы.
 
-ШАГ 3 — РАСПРЕДЕЛЕНИЕ МЕЖДУ СПИКЕРАМИ:
-- Используй смысл диалога (вопрос/ответ, обращения, “да/нет”, контекст соседних реплик) чтобы понять, кто говорит.
-- Если в одном исходном сегменте после split получилось 2+ реплики, часто это чередование разных людей — распределяй их по спикерам соответственно.
-- Не меняй текст (кроме удаления ведущих маркеров тире/пробелов у частей). Не исправляй стиль/грамматику.
+Если в одном text встречается несколько реплик с тире, например:
+"— Да. — А вы? — Хорошо."
+то нужно разбить это на несколько объектов, по одному на каждую реплику.
 
-ФОРМАТ ОТВЕТА:
-Верни СТРОГО JSON-массив объектов. Каждый объект:
-{
-  "id": <int>,             // ID исходного сегмента
-  "speaker": "<speaker>",  // один из выбранных спикеров (см. ШАГ 1)
-  "text": "<text>",        // соответствующая реплика (без ведущего тире)
-  "source_ids": [<int>]    // всегда [id] исходного сегмента
-}
+Если тире стоит внутри фразы, например:
+"Ну да — а вы?"
+то это не маркер смены спикера, split не делать.
 
-Запрещено:
-- Markdown/объяснения/обёртки — только JSON-массив.
-- Добавлять новых спикеров “по ходу ответа”.
-"""
+ПРАВИЛО РАЗБИЕНИЯ ПО ПРЕДЛОЖЕНИЯМ (БЕЗ ТИРЕ)
+Иногда ASR склеивает несколько реплик в один text без тире. В этом случае разрешено разбивать по границам предложений:
+- потенциальный фрагмент-реплика часто начинается с заглавной буквы (А-Я/Ё или A-Z) и заканчивается точкой ".";
+- если подряд идут несколько таких завершённых предложений, их МОЖНО разделить на отдельные объекты с распределением ролей между ними.
 
+Ограничения и здравый смысл:
+- Не делай split внутри сокращений/аббревиатур (например: "г.", "ул.", "т.д.", "и т.п.", "др.", "т.е.", инициалы).
+- Не режь предложения, если это похоже на одну реплику одного человека (единая мысль без смены роли).
+- Делай split по предложениям только если по смыслу и по глобальному контексту диалога видно, что это разные реплики (часто — чередование вопрос/ответ).
 
-_LLM_REFINE_SYSTEM = """Ты — строгий редактор JSON-стенограммы (второй проход, refine).
+РАСПРЕДЕЛЕНИЕ РЕПЛИК МЕЖДУ СПИКЕРАМИ
+1) Используй смысл диалога: вопрос/ответ, обращения, согласие, отрицание, контекст соседних реплик.
+2) Если после split один исходный сегмент дал несколько реплик, обычно это чередование говорящих.
+3) Назначай спикеров последовательно и согласованно по всему диалогу.
+4) Меняй распределение только при явной логической ошибке.
+5) Если число реально различимых говорящих отличается от num_speakers_hint:
+   - если говорящих больше, аккуратно объединяй очевидные дубликаты;
+   - если говорящих меньше, не выдумывай лишних без явных оснований.
+6) Приоритет всегда у логики диалога и строгого ограничения по числу спикеров.
 
-У тебя есть:
-1) исходный ASR (список реплик с id/start/end/duration_sec/text/speaker)
-2) черновик правок после первого прохода (JSON-массив объектов с полями id/speaker/text/source_ids)
+ЧТО МОЖНО И ЧТО НЕЛЬЗЯ МЕНЯТЬ
+Можно:
+- убрать лишние пробелы вокруг реплики;
+- разбить один исходный объект на несколько, если там несколько реплик.
 
-ОГРАНИЧЕНИЕ ПО ЧИСЛУ СПИКЕРОВ:
-- Во входных метаданных может быть num_speakers_hint. Если это целое число N > 0, то в финальном ответе ДОЛЖНО быть ровно N различных значений speaker.
+Нельзя:
+- добавлять новые слова;
+- исправлять стиль;
+- менять смысл;
+- объединять реплики без необходимости.
 
-ГЛАВНОЕ ТРЕБОВАНИЕ ЭТОГО ПРОХОДА — УБРАТЬ МЕТКИ SPEAKER_i:
-- В черновике (pass1) speaker может быть вида SPEAKER_1 … SPEAKER_10.
-- В финальном ответе НЕ ДОЛЖНО быть ни одного значения speaker вида SPEAKER_i.
-- Вместо этого используй РОЛИ (например: "Оператор", "Клиент", "Сотрудник", "Заявитель", "Интервьюер", "Интервьюируемый")
-  или нейтральные роли "ROLE_1", "ROLE_2", ... "ROLE_N" (если по тексту нельзя понять конкретную роль).
+ФОРМАТ ВЫХОДА
+Верни СТРОГО JSON-массив.
 
-ВАЖНО: SPEAKER_i МОГУТ БЫТЬ УЖЕ РАСПРЕДЕЛЕНЫ ПРАВИЛЬНО — ОПИРАЙСЯ НА НИХ:
-- Относись к pass1 как к исходной разметке: если SPEAKER_1 и SPEAKER_2 уже логично разделены, не “переигрывай” распределение.
-- Твоя задача — сделать стабильное ПЕРЕИМЕНОВАНИЕ: выбери отображение SPEAKER_i → ROLE_j и применяй его последовательно по всему диалогу.
-- Перераспределяй реплики между спикерами ТОЛЬКО если видишь явные логические ошибки (вопрос/ответ, обращения, противоречия контексту).
-
-КАК РАСПРЕДЕЛЯТЬ РОЛИ, ЕСЛИ num_speakers_hint ЗАДАН:
-- Используй ровно N ролей. Не создавай ролей больше N и не оставляй меньше N.
-- Если в черновике уже есть K разных SPEAKER_i:
-  - Если K == N: просто переименуй каждый SPEAKER_i в одну роль (1:1).
-  - Если K > N: аккуратно объедини очевидные дубликаты (например, SPEAKER_3 по смыслу совпадает с SPEAKER_1), затем переименуй в N ролей.
-  - Если K < N: только если это действительно видно по диалогу, раздели одного из SPEAKER_i на дополнительную роль; иначе используй нейтральные ROLE_* и распределяй минимально-инвазивно.
-
-Задачи refine:
-- Проверь логику диалога и согласованность спикеров/ролей.
-- Исправь оставшиеся ошибки merge/split (source_ids), если они противоречат смыслу.
-- Сохрани текст максимально близко к ASR/черновику. Не добавляй новые слова; можно только убрать ведущие маркеры тире/лишние пробелы.
-
-ФОРМАТ ОТВЕТА:
-Верни СТРОГО один JSON-массив объектов в том же формате, что и в первом проходе:
+Каждый объект должен иметь вид:
 {
   "id": <int>,
-  "speaker": "<ROLE>",
+  "speaker": "<speaker>",
   "text": "<text>",
   "source_ids": [<int>]
 }
 
-Запрещено:
-- Любые значения speaker вида SPEAKER_i в финальном JSON.
-- Любые пояснения/markdown — только JSON-массив.
+ТРЕБОВАНИЯ К JSON
+- Только JSON-массив, без markdown, без пояснений, без обёрток.
+- source_ids всегда содержит только исходный id этого сегмента: [id].
+- text должен содержать реплику без ведущего тире.
+- speaker должен быть одним из заранее выбранных спикеров.
+- В ответе не должно быть лишних полей.
+- В ответе должно быть ровно N уникальных speaker, если num_speakers_hint = N.
+
+ФИНАЛЬНАЯ ПРОВЕРКА ПЕРЕД ОТВЕТОМ
+Проверь:
+- все ли тире-реплики разделены;
+- нет ли speaker вида SPEAKER_i;
+- соблюдено ли число уникальных спикеров;
+- соответствует ли распределение логике диалога;
+- сохранён ли текст без лишних изменений.
+
+Возвращай только итоговый JSON-массив.
 """
 
 
 def _truthy_env(name: str, default: bool) -> bool:
+    # Читает значение переменной окружения с именем name; тип str — имя ключа в os.environ.
     v = os.getenv(name)
+    # Если переменная не задана или после trim пустая строка — нет явного значения от пользователя.
     if v is None or str(v).strip() == "":
+        # Возвращаем значение по умолчанию, переданное вызывающим кодом (default).
         return default
+    # Нормализуем к строке, убираем пробелы по краям и приводим к нижнему регистру для сравнения.
     s = str(v).strip().lower()
+    # Распознаём «истинные» значения в распространённых формах (цифра 1, англ. true/yes/y/on).
     if s in {"1", "true", "yes", "y", "on"}:
+        # Явно указано включить/да — трактуем как True.
         return True
+    # Распознаём «ложные» значения (0, false, no, n, off).
     if s in {"0", "false", "no", "n", "off"}:
+        # Явно указано выключить/нет — трактуем как False.
         return False
+    # Любая другая непустая строка не считается ни true, ни false — сохраняем default (безопасный fallback).
     return default
 
 
 def _extract_json_array(text: str) -> str:
+    # Убираем ведущие/замыкающие пробельные символы у всего ответа модели.
     s = text.strip()
+    # Если в тексте есть markdown-ограждения ``` ... ```, пробуем вытащить JSON изнутри них.
     if "```" in s:
+        # Режем строку по тройным обратным кавычкам — получаем чередование «язык/код/язык/код».
         parts = s.split("```")
+        # Перебираем каждый фрагмент между/вокруг fence; ищем первый, что похож на JSON.
         for p in parts:
+            # У каждого куска тоже убираем пробелы по краям.
             pp = p.strip()
+            # JSON-массив начинается с '['; объект — с '{'; берём первый подходящий блок.
             if pp.startswith("{") or pp.startswith("["):
+                # Считаем, что нашли полезное содержимое — подменяем исходную строку s этим фрагментом.
                 s = pp
+                # Дальше искать не нужно — выходим из цикла for.
                 break
+    # Пытаемся найти JSON-массив в конце строки: от '[' до последнего ']' с учётом любых символов внутри.
     m = re.search(r"\[[\s\S]*\]\s*$", s)
+    # Если регулярное выражение что-то нашло (m не None).
     if m:
+        # Возвращаем совпадение целиком, обрезая пробелы по краям — это должен быть чистый JSON-массив.
         return m.group(0).strip()
+    # Запасной путь: ищем позицию первой '[' и последней ']' в строке.
     i = s.find("[")
+    # rfind ищет последнее вхождение ']' справа налево.
     j = s.rfind("]")
+    # Если обе скобки найдены и порядок корректен (открытие раньше закрытия).
     if i >= 0 and j > i:
+        # Вырезаем подстроку от '[' до ']' включительно и strip — получаем массив как текст.
         return s[i : j + 1].strip()
+    # Ничего похожего на массив не нашли — возвращаем всю (уже возможно обрезанную) строку как есть.
     return s
 
 
@@ -645,55 +677,49 @@ def _llm_chat_json_array(
     model: str,
     temperature: float,
     timeout_sec: float,
+    base_url: str | None,
 ) -> list[dict]:
-    groq_key = (os.getenv("GROQ_API_KEY") or "").strip()
     openai_key = (os.getenv("OPENAI_API_KEY") or "").strip()
-    base_url = (os.getenv("OPENAI_BASE_URL") or os.getenv("LLM_BASE_URL") or "").strip() or None
+    # Необязательный кастомный base URL.
+    # Приоритет: явный аргумент base_url → OPENAI_BASE_URL → LLM_BASE_URL.
+    if not base_url:
+        base_url = (os.getenv("OPENAI_BASE_URL") or os.getenv("LLM_BASE_URL") or "").strip() or None
 
-    if groq_key and not openai_key:
-        try:
-            from groq import Groq  # type: ignore[import-not-found]
-        except ImportError as e:
-            raise RuntimeError("Для GROQ_API_KEY установите пакет groq (см. Pipline_1_New/requirements.txt)") from e
-        client = Groq(api_key=groq_key, timeout=timeout_sec)
-        resp = client.chat.completions.create(
-            model=model,
-            messages=[
-                {"role": "system", "content": system},
-                {"role": "user", "content": user},
-            ],
-            temperature=temperature,
-        )
-        content = (resp.choices[0].message.content or "").strip()
-    else:
-        if not openai_key:
-            raise RuntimeError("Нужен OPENAI_API_KEY (или только GROQ_API_KEY для Groq SDK)")
-        try:
-            from openai import OpenAI  # type: ignore[import-not-found]
-        except ImportError as e:
-            raise RuntimeError("Для LLM установите пакет openai (см. Pipline_1_New/requirements.txt)") from e
-        kwargs: dict = {"api_key": openai_key, "timeout": timeout_sec}
-        if base_url:
-            kwargs["base_url"] = base_url
-        client = OpenAI(**kwargs)
-        resp = client.chat.completions.create(
-            model=model,
-            messages=[
-                {"role": "system", "content": system},
-                {"role": "user", "content": user},
-            ],
-            temperature=temperature,
-        )
-        content = (resp.choices[0].message.content or "").strip()
+    if not openai_key:
+        raise RuntimeError("Нужен OPENAI_API_KEY в окружении или в .env")
+    try:
+        from openai import OpenAI  # type: ignore[import-not-found]
+    except ImportError as e:
+        raise RuntimeError("Для LLM установите пакет openai (см. Pipline_1_New/requirements.txt)") from e
+    kwargs: dict = {"api_key": openai_key, "timeout": timeout_sec}
+    if base_url:
+        kwargs["base_url"] = base_url
+    client = OpenAI(**kwargs)
+    resp = client.chat.completions.create(
+        model=model,
+        messages=[
+            {"role": "system", "content": system},
+            {"role": "user", "content": user},
+        ],
+        temperature=temperature,
+    )
+    content = (resp.choices[0].message.content or "").strip()
 
+    # Из «сырого» текста ответа модели выделяем подстроку, похожую на JSON-массив (см. _extract_json_array).
     raw = _extract_json_array(content)
+    # Парсим JSON строго в Python-объект (ожидается list на верхнем уровне).
     data = json.loads(raw)
+    # Проверка типа верхнего уровня: иначе downstream-код сломается, ожидая список патчей.
     if not isinstance(data, list):
         raise RuntimeError("LLM вернул не JSON-массив")
+    # Готовим чистый список словарей: отфильтруем не-словари (модель могла вернуть мусор/числа).
     out: list[dict] = []
+    # Итерируем по элементам верхнего уровня JSON-массива.
     for it in data:
+        # Оставляем только объекты-словари; остальное игнорируем.
         if isinstance(it, dict):
             out.append(it)
+    # Возвращаем список dict — формат «патчей» для последующей сборки стенограммы.
     return out
 
 
@@ -704,26 +730,32 @@ def llm_speaker_correction(
     num_speakers: int | None,
     temperature: float,
     timeout_sec: float,
-    second_pass: bool,
+    base_url: str | None = None,
 ) -> list[dict]:
+    # Быстрый выход: нечего исправлять, избегаем лишних вызовов LLM и логирования.
     if not rows:
         return rows
 
     _llm_log(
-        f"старт: входных реплик={len(rows)}, model={model!r}, second_pass={bool(second_pass)}",
+        f"старт: входных реплик={len(rows)}, model={model!r}",
         indent=0,
     )
 
+    # Здесь будет «нормализованный» ASR: только валидные строки с целочисленными id 1..N по порядку rows.
     indexed: list[dict] = []
+    # enumerate(..., start=1) даёт i=1 для первой реплики — id совпадают с порядком после фильтрации.
     for i, r in enumerate(rows, start=1):
         try:
+            # Пытаемся прочитать временные границы как float; любая ошибка → пропускаем реплику целиком.
             s = float(r.get("start"))
             e = float(r.get("end"))
         except Exception:
             continue
+        # Текст реплики приводим к строке и убираем пробелы; пустой текст не имеет смысла для LLM.
         txt = str(r.get("text", "")).strip()
         if not txt:
             continue
+        # Добавляем компактный объект для модели: id, время, длительность, спикер, текст.
         indexed.append(
             {
                 "id": i,
@@ -734,16 +766,20 @@ def llm_speaker_correction(
                 "text": txt,
             }
         )
+    # Если после фильтрации не осталось ни одной пригодной реплики — возвращаем исходный rows без изменений.
     if not indexed:
         _llm_log("нет валидных строк для отправки (пустые/битые) → пропуск", indent=0)
         return rows
 
+    # Множество уникальных имён спикеров из indexed; sorted даёт стабильный порядок в строке метаданных.
     speakers = sorted({str(x.get("speaker", "")).strip() for x in indexed if str(x.get("speaker", "")).strip()})
+    # Три строки метаданных, которые модель увидит в user-промпте (подсказки по числу спикеров и наблюдаемым меткам).
     meta_lines = [
         f"model={model}",
         f"num_speakers_hint={num_speakers if num_speakers is not None else 'unknown'}",
         f"speakers_observed={len(speakers)} ({', '.join(speakers)})",
     ]
+    # Собираем текст первого прохода: инструкция + метаданные + пустая строка + JSON indexed в UTF-8 (ensure_ascii=False).
     user_pass1 = "\n".join(
         [
             "Ниже JSON массива реплик (ASR). Исправь speaker/text.",
@@ -754,113 +790,124 @@ def llm_speaker_correction(
         ]
     )
 
+    # Логируем факт отправки pass1 и количество реплик в теле запроса.
     _llm_log(f"pass1: отправка {len(indexed)} реплик…", indent=0)
+    # Вызываем LLM с системным промптом первого прохода (_LLM_SPEAKER_SYSTEM) и собранным user_pass1.
     patch1 = _llm_chat_json_array(
         system=_LLM_SPEAKER_SYSTEM,
         user=user_pass1,
         model=model,
         temperature=temperature,
         timeout_sec=timeout_sec,
+        base_url=base_url,
     )
     _llm_log(f"pass1: получено объектов={len(patch1)}", indent=0)
 
     patch_final = patch1
-    if second_pass:
-        draft = json.dumps(patch1, ensure_ascii=False)
-        user_pass2 = "\n".join(
-            [
-                "Сделай второй проход (refine) по черновику.",
-                "Метаданные:",
-                *meta_lines,
-                "",
-                "ASR:",
-                json.dumps(indexed, ensure_ascii=False),
-                "",
-                "Черновик (pass1):",
-                draft,
-            ]
-        )
-        _llm_log("pass2: refine…", indent=0)
-        patch2 = _llm_chat_json_array(
-            system=_LLM_REFINE_SYSTEM,
-            user=user_pass2,
-            model=model,
-            temperature=temperature,
-            timeout_sec=timeout_sec,
-        )
-        _llm_log(f"pass2: получено объектов={len(patch2)}", indent=0)
-        patch_final = patch2 if patch2 else patch1
 
+    # Словарь id → исходная запись indexed для быстрого доступа при сборке merge/split по source_ids.
     by_id: dict[int, dict] = {}
+    # Заполняем by_id из списка indexed; ключ — целочисленный id реплики.
     for x in indexed:
         try:
+            # int(x["id"]) гарантирует тип ключа dict; при битых данных ловим любое исключение.
             by_id[int(x["id"])] = x
         except Exception:
             continue
 
     def _parse_src_ids(p: dict) -> list[int] | None:
+        # Поле source_ids задаёт, какие исходные id объединяет/делит патч p; может отсутствовать.
         src = p.get("source_ids", None)
+        # Если это непустой список — основной формат: несколько целых id исходных реплик.
         if isinstance(src, list) and src:
             ids: list[int] = []
+            # Каждый элемент списка приводим к строке и проверяем, что это «цифровая» форма (допускаем ведущий минус в строке, но isdigit после lstrip).
             for it in src:
                 if str(it).strip().lstrip("-").isdigit():
                     ids.append(int(it))
+            # Убираем дубликаты и сортируем — стабильное представление набора id.
             ids = sorted(set(ids))
+            # Валидный набор: непустой и каждый id реально существует в by_id (иначе патч «в воздухе»).
             return ids if ids and all(i in by_id for i in ids) else None
+        # Фолбэк: если source_ids нет, пробуем поле id как одиночный исходный id.
         pid = p.get("id", None)
         if str(pid).strip().lstrip("-").isdigit():
             i = int(pid)
+            # Возвращаем список из одного id только если он известен indexed.
             return [i] if i in by_id else None
+        # Ни source_ids, ни валидного id — патч нельзя привязать к ASR.
         return None
 
     class _DSU:
+        # Внутренний Disjoint Set Union для группировки id, которые модель сказала слить (общие source_ids).
         def __init__(self) -> None:
+            # parent: для каждого элемента x храним родителя в дереве DSU; изначально пусто, создаётся лениво в find.
             self.p: dict[int, int] = {}
 
         def find(self, x: int) -> int:
+            # Если x ещё не встречался — он корень сам для себя (setdefault).
             self.p.setdefault(x, x)
+            # Сжатие путей: если родитель не корень — рекурсивно находим корень и переподвешиваем.
             if self.p[x] != x:
                 self.p[x] = self.find(self.p[x])
             return self.p[x]
 
         def union(self, a: int, b: int) -> None:
+            # Находим корни двух элементов.
             ra, rb = self.find(a), self.find(b)
+            # Если корни разные — объединяем деревья, подвешивая rb под ra (произвольный, но детерминированный выбор).
             if ra != rb:
                 self.p[rb] = ra
 
+    # Экземпляр DSU для накопления компонент слияния по патчам с |source_ids| >= 2.
     dsu = _DSU()
+    # Проходим по всем финальным патчам и соединяем id из каждого мультимножества source_ids.
     for p in patch_final:
         src = _parse_src_ids(p)
+        # Одиночный id или пусто — для DSU-слияния не подходит (нет пары).
         if not src or len(src) < 2:
             continue
+        # Берём первый id как якорь и union с каждым остальным — все окажутся в одной компоненте.
         a0 = src[0]
         for b in src[1:]:
             dsu.union(a0, b)
 
+    # Для каждого исходного id вычисляем корень DSU — все id с одним корнем должны сливаться в один merge.
     merge_root: dict[int, int] = {i: dsu.find(i) for i in by_id.keys()}
 
+    # singles: на каждый исходный id список патчей, у которых ровно один source_id (update или split на одном id).
     singles: dict[int, list[dict]] = {}
+    # multis: список пар (кортеж id по возрастанию, патч) для патчей с несколькими source_ids (merge-кандидаты).
     multis: list[tuple[tuple[int, ...], dict]] = []
     for p in patch_final:
         src = _parse_src_ids(p)
+        # Патч без привязки к ASR пропускаем.
         if not src:
             continue
         if len(src) == 1:
+            # Один id — кладём патч в «корзину» этого id (может накопиться несколько → split).
             singles.setdefault(src[0], []).append(p)
         else:
+            # Несколько id — сохраняем как tuple для сравнения множеств и последующего матчинга с компонентой merge.
             multis.append((tuple(src), p))
 
+    # Множество id, которые уже полностью обработаны merge/split/update и не должны повторно попасть в финальную сборку.
     consumed: set[int] = set()
+    # Итоговый список реплик после применения патчей (временная шкала будет отсортирована в конце).
     rebuilt: list[dict] = []
 
     def _emit_split(i: int, parts: list[dict]) -> None:
+        # Исходная ASR-реплика с индексом i — источник таймингов для разбиения.
         base = by_id[i]
         t0 = float(base["start"])
         t1 = float(base["end"])
+        # Полная длительность сегмента в секундах (используется для пропорционального деления времени).
         duration = t1 - t0
 
+        # Оставляем только части патча с непустым text; пустые не дают содержательного split.
         valid_parts = [p for p in parts if str(p.get("text", "")).strip()]
         if not valid_parts:
+            # Если модель вернула только пустые тексты — не дробим: одна реплика как в base (fallback).
             rebuilt.append(
                 {
                     "speaker": str(base.get("speaker", "")),
@@ -871,22 +918,30 @@ def llm_speaker_correction(
             )
             return
 
+        # Суммарная «масса» по длине строк текста — прокси для доли времени каждому подотрезку.
         total_chars = sum(len(str(p.get("text", ""))) for p in valid_parts)
 
+        # Текущий левый край подотрезка в секундах; начинаем с t0 и двигаемся вправо.
         cur_t = t0
         for j, p in enumerate(valid_parts):
             p_text = str(p.get("text", "")).strip()
+            # Спикер из патча; если пусто — берём спикера исходного сегмента base.
             p_spk = str(p.get("speaker", "")).strip() or str(base.get("speaker", ""))
 
+            # Убираем ведущие тире/пробелы и делаем capitalize для читаемости (как в требованиях к refine).
             clean_text = re.sub(r"^[—\-\s]+", "", p_text).capitalize()
 
+            # Доля длительности пропорциональна доле символов данного куска в сумме по всем частям.
             share = len(p_text) / total_chars
             seg_dur = share * duration
 
+            # Теоретический правый край без учёта зазоров между подотрезками.
             seg_end = cur_t + seg_dur
             if j < len(valid_parts) - 1:
+                # Для не последних частей: не даём сегменту стать слишком коротким и слегка укорачиваем (0.05) для зазора.
                 actual_end = max(cur_t + 0.1, seg_end - 0.05)
             else:
+                # Последняя часть обязана закончиться ровно на t1, чтобы не осталось «дыры» в конце.
                 actual_end = t1
 
             rebuilt.append(
@@ -897,14 +952,19 @@ def llm_speaker_correction(
                     "text": clean_text,
                 }
             )
+            # Следующий кусок начинается чуть правее actual_end (0.05 с) — искусственный микрозазор между сегментами.
             cur_t = actual_end + 0.05
 
     def _emit_merge(ids: list[int], parts: list[dict]) -> None:
+        # ids могут прийти с повторами — нормализуем к отсортированному множеству.
         ids = sorted(set(ids))
+        # Объединённый сегмент начинается в минимальном start среди участников.
         t0 = min(float(by_id[i]["start"]) for i in ids)
+        # И заканчивается в максимальном end.
         t1 = max(float(by_id[i]["end"]) for i in ids)
         texts: list[str] = []
         spk = ""
+        # Собираем тексты и первого непустого спикера из патчей merge-группы.
         for p in parts:
             tx = str(p.get("text", "")).strip()
             if tx:
@@ -914,22 +974,32 @@ def llm_speaker_correction(
                 spk = sp
         merged_text = " ".join(texts).strip()
         if not merged_text:
+            # Если патчи не дали текста — склеиваем исходные тексты ASR по id в порядке ids.
             merged_text = " ".join(str(by_id[i].get("text", "")) for i in ids).strip()
         if not spk:
+            # Если спикер так и не определён — берём спикера первого id в отсортированном списке.
             spk = str(by_id[ids[0]].get("speaker", ""))
         rebuilt.append({"speaker": spk, "start": round(t0, 3), "end": round(t1, 3), "text": merged_text})
 
     # 1) Обработка merge-компонент (по source_ids длиной > 1 и DSU)
+    # Уже обработанные корни DSU, чтобы не смержить одну компоненту дважды при переборе её членов.
     roots_done: set[int] = set()
+    # Идём по id в возрастающем порядке — детерминированный порядок обхода компонент.
     for i in sorted(by_id.keys()):
+        # Корень компоненты для текущего id.
         r = merge_root[i]
+        # Если этот корень уже обработан merge-веткой — пропускаем всех остальных членов компоненты.
         if r in roots_done:
             continue
+        # members — все id, у которых find в DSU дал тот же корень r (одна компонента слияния).
         members = sorted({k for k, rr in merge_root.items() if rr == r})
+        # Компонента из одного id — это не merge (ничего сливать), идём дальше.
         if len(members) <= 1:
             continue
+        # Помечаем корень как обработанный до фактического emit, чтобы не зациклиться на соседях.
         roots_done.add(r)
 
+        # Собираем те патчи из multis, чей набор source_ids целиком лежит внутри members и содержит >1 id.
         mparts: list[dict] = []
         for tup, p in multis:
             st = set(tup)
@@ -939,19 +1009,25 @@ def llm_speaker_correction(
             # Нет явного merge-объекта — оставим как отдельные реплики
             continue
 
+        # Строим одну объединённую реплику на всю компоненту members по текстам/спикерам из mparts.
         _emit_merge(members, mparts)
+        # Все id из компоненты считаются поглощёнными merge — дальше в шаге 2 их не трогаем.
         consumed.update(members)
 
     # 2) Одиночные id: либо update, либо split (несколько объектов на один id)
     for i in sorted(by_id.keys()):
+        # Уже вошёл в merge — пропускаем.
         if i in consumed:
             continue
+        # Все патчи, которые ссылаются только на этот id (0, 1 или много записей).
         parts = singles.get(i, [])
         if len(parts) >= 2:
+            # Несколько патчей на один id — трактуем как split одной ASR-реплики на несколько подреплик.
             _emit_split(i, parts)
             consumed.add(i)
             continue
         if len(parts) == 1:
+            # Ровно один патч — простое обновление speaker/text на том же интервале base.
             p = parts[0]
             base = by_id[i]
             sp = str(p.get("speaker", "")).strip() or str(base.get("speaker", ""))
@@ -979,10 +1055,12 @@ def llm_speaker_correction(
         )
         consumed.add(i)
 
+    # Если по какой-то причине rebuilt пуст (аномалия) — не отдаём пустой список, возвращаем исходные rows.
     if not rebuilt:
         _llm_log("выход пустой после сборки → оставляем исходные строки", indent=0)
         return rows
 
+    # Сортируем финальные реплики по времени начала, при равенстве — по концу (стабильный хронологический порядок).
     rebuilt.sort(key=lambda r: (float(r["start"]), float(r["end"])))
     _llm_log(f"готово: выходных реплик={len(rebuilt)}", indent=0)
     return rebuilt
@@ -2102,11 +2180,6 @@ def _llm_timeout_sec() -> float:
         return 120.0
 
 
-def _llm_second_pass_default() -> bool:
-    # Всегда делаем второй проход (refine) для корректировки merge/split/speaker.
-    return True
-
-
 def run_pipeline(
     audio_path: str,
     *,
@@ -2418,13 +2491,13 @@ def main() -> int:
     )
     parser.add_argument(
         "--llm-model",
-        default="gpt-4o-mini",
-        help="Модель для LLM-коррекции (OpenAI-совместимый API)",
+        default="google/gemma-4-26b-a4b-it",
+        help="Модель для LLM-коррекции",
     )
     parser.add_argument(
         "--llm-base-url",
-        default=None,
-        help="Базовый URL API (proxy, vLLM, Groq: https://api.groq.com/openai/v1 и т.п.)",
+        default="https://ai.gov.by/api/openai/v1",
+        help="Базовый URL OpenAI-совместимого API (например Gov AI: https://ai.gov.by/api/openai/v1)",
     )
     args = parser.parse_args()
     if args.merge_off:
@@ -2451,9 +2524,8 @@ def main() -> int:
     if out_path.suffix.lower() != ".json":
         out_path = out_path.with_suffix(".json")
 
-    groq_key = (os.getenv("GROQ_API_KEY") or "").strip()
     openai_key = (os.getenv("OPENAI_API_KEY") or "").strip()
-    auto_llm = bool(groq_key or openai_key) and _truthy_env("USE_LLM", True)
+    auto_llm = bool(openai_key) and _truthy_env("USE_LLM", True)
     use_llm = (auto_llm or bool(args.use_llm)) and (not bool(args.no_llm))
 
     num_speakers = args.num_speakers
@@ -2470,20 +2542,15 @@ def main() -> int:
             num_speakers = int(s)
 
     llm_model = (os.getenv("LLM_MODEL") or "").strip() or None
-    if groq_key and not openai_key:
-        if (not llm_model) or (("/" not in llm_model) and llm_model.startswith("gpt-")):
-            llm_model = "openai/gpt-oss-120b"
-            print(f"LLM: auto model для Groq: {llm_model}", flush=True)
 
-    if use_llm and not groq_key and not openai_key:
-        print("LLM: ключи не найдены (нужен GROQ_API_KEY или OPENAI_API_KEY) — LLM выключено", file=sys.stderr, flush=True)
+    if use_llm and not openai_key:
+        print("LLM: OPENAI_API_KEY не найден — LLM выключено", file=sys.stderr, flush=True)
         use_llm = False
 
     if use_llm:
         print(
             "LLM: включено ("
             f"USE_LLM={os.getenv('USE_LLM')!r}, "
-            f"LLM_SECOND_PASS={os.getenv('LLM_SECOND_PASS')!r}, "
             f"model={llm_model!r}"
             ")",
             flush=True,
@@ -2511,7 +2578,8 @@ def main() -> int:
         return 1
 
     if use_llm:
-        llm_model_final = (llm_model or str(args.llm_model).strip() or "gpt-4o-mini").strip()
+        llm_model_final = (llm_model or str(args.llm_model).strip() or "google/gemma-4-26b-a4b-it").strip()
+        llm_base_url_final = (str(args.llm_base_url).strip() or None) if args.llm_base_url is not None else None
         try:
             _llm_log(
                 f"запуск после GigaAM: строк ASR={len(rows)}, model={llm_model_final!r}",
@@ -2523,7 +2591,7 @@ def main() -> int:
                 num_speakers=num_speakers,
                 temperature=_llm_temperature(),
                 timeout_sec=_llm_timeout_sec(),
-                second_pass=_llm_second_pass_default(),
+                base_url=llm_base_url_final,
             )
             _llm_log(f"завершено: строк после LLM={len(rows)}", indent=0)
         except Exception as e:

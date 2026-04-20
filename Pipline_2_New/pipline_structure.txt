@@ -1,0 +1,33 @@
+Фактический пайплайн: Pipline_2_New/run_pipeline.py (функция run_multimodal_pipeline).
+
+Устройство: --device auto (по умолчанию) → CUDA при наличии, иначе Apple MPS, иначе CPU.
+Если в логах «cpu» при auto — см. пояснение: часто установлен PyTorch без CUDA (нужен torch+cu…).
+Silero VAD, полный waveform, ECAPA, GigaAM/Whisper — на выбранном torch-устройстве (кластеризация/sklearn остаётся на CPU).
+
+HF: в корневом .env задайте HF_TOKEN или HUGGING_FACE_HUB_TOKEN — подставляется в Hub и в SpeechBrain FetchConfig(token=True).
+
+аудио
+↓
+(1) load_waveform_16k_mono — ffmpeg → 16 kHz mono (как в Pipline_1_New)
+↓
+(2) vad — Silero VAD → интервалы речи
+↓
+(3) vad_to_speech_segments — merge + pad + split (эвристики как speech_windows в v1)
+↓
+(4A) ECAPA-TDNN — эмбеддинг на каждый сегмент (ветка «кто говорит»)
+(4B) ASR — GigaAM или Whisper на тот же [start,end] (ветка «что сказано»)
+     Ветки не обмениваются данными до шага объединения.
+↓
+(5) cluster_embeddings — HDBSCAN или Agglomerative → speaker_init
+↓
+(6) multimodal сегменты: start, end, embedding, text, speaker_init
+↓
+(7) joint_similarity_matrix (α·cos + β·text + γ·temporal) → graph_partition_labels (SpectralClustering)
+↓
+(8) temporal smoothing: median + remove_micro_switches; опционально CategoricalHMM (hmmlearn)
+↓
+(9) llm_speaker_correction в Pipline_2_New/llm_post.py (те же промпты, что в Pipline_1_New) — OpenAI-совместимый API через OPENAI_API_KEY (+ OPENAI_BASE_URL); без импорта run_pipeline.py v1
+↓
+(10) опционально: --pre-llm-centroid-merge (кластеры эмбеддингов) и/или --post-llm-centroid-merge (метки после LLM)
+↓
+(11) build_turns (в main после LLM) — склейка подряд идущих одного спикера → JSON [{speaker, start, end, text}]

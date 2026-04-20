@@ -1,0 +1,10 @@
+# Пайплайн v2: без pyannote / LangGraph. Нужны ffmpeg, torch.
+numpy
+python-dotenv
+speechbrain>=1.0.0
+hdbscan>=0.8.33
+scikit-learn
+openai>=1.40.0
+# Опционально: GigaAM — см. ..\requirements_gigaam.txt
+# Опционально: openai-whisper для --asr whisper
+# Опционально: hmmlearn для --hmm-smooth

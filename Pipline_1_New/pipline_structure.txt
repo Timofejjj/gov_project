@@ -1,15 +1,40 @@
-в папке Pipline_1_New Собери РАБОЧИЙ пайплан для дирилизации Вот схема пайплайна: audio 
-↓ 
-(1) VAD → Silero VAD / pyannote VAD 
-↓ 
-(2) segmentation → pyannote segmentation-3.0 
-↓ 
-(3) chunking → rule-based (разрез по таймкодам) 
-↓ 
-(4) speaker embedding → ECAPA-TDNN (SpeechBrain) [лучший вариант] 
-↓ 
-(5) clustering → HDBSCAN (или Agglomerative) 
-↓ 
-(6) refinement → pyannote resegmentation (optional) 
-↓ 
-(7) ASR (GigaAM) ↓ output: text + speaker labels
+Фактический пайплайн в Pipline_1_New/run_pipeline.py (LangGraph: build_pipeline_graph).
+Пояснения ниже — «для чего блок» (зачем он нужен в конечном результате).
+
+аудиофайл
+↓
+(0) load_hf_waveform — HF_TOKEN (.env), ffmpeg → waveform 16 kHz mono на device
+    для чего: привести любой входной аудиофайл к единому формату (16 kHz mono) и подготовить доступ к моделям HF (pyannote).
+↓
+(1) vad — Silero VAD (torch.hub silero-vad), интервалы речи
+    для чего: отделить речь от тишины/шума, чтобы не считать сегментацию/эмбеддинги «по пустоте» и ускорить обработку.
+↓
+(2) speech_windows — эвристики по VAD: merge интервалов, паддинг, сплит длинных окон (без отдельного «chunking»-модуля)
+    для чего: сформировать удобные окна речи (не слишком длинные и не слишком рваные), по которым дальше стабильно работает pyannote и эмбеддинги.
+↓
+(3) pyannote_segment — pyannote/segmentation-3.0 по каждому speech-окну; опционально pyannote/overlapped-speech-detection (OSD)
+    для чего: получить покадровые маски/активности потенциальных спикеров и (опционально) сигнал о перебиваниях, чтобы не «склеивать» перекрывающуюся речь.
+↓
+    если нет речи / max(speaker_count)=0 → finish_empty → END (пустой asr_rows)
+↓
+(4) ecapa_embeddings — SpeechBrain EncoderClassifier speechbrain/spkrec-ecapa-voxceleb по маскам локальных спикеров
+    для чего: преобразовать участки речи каждого локального спикера в векторные представления (эмбеддинги) для последующей глобальной кластеризации по «личности» голоса.
+↓
+(5) cluster — hdbscan (euclidean, обработка шума) ИЛИ sklearn AgglomerativeClustering (precomputed 1−cosine; n_clusters или distance_threshold)
+    для чего: объединить эмбеддинги из разных окон в общие глобальные кластеры спикеров (кто один и тот же человек по всему файлу).
+↓
+    если нет валидных кластеров → finish_empty → END
+↓
+(6) resegment — пост-кластерная гладкая разметка: постериоры из binarized + метки кластеров, Viterbi (не pyannote resegmentation); отключается флагом --no-resegment (resegment=False)
+    для чего: сгладить и стабилизировать границы смены спикера после кластеризации (меньше «дребезга», лучше короткие реплики/переключения), учитывая overlap.
+↓
+(7) build_turns — сбор реплик: при включённом resegment — turns из Viterbi; иначе _reconstruct_discrete + to_annotation; затем merge коротких зазоров, опциональная обрезка по VAD, снятие нахлёстов (_flatten_turns_no_overlap), хронологические SPEAKER_*
+    для чего: превратить покадровую разметку в финальные «реплики» (start/end + speaker), убрать микро-паузы/нахлёсты, подготовить чистые сегменты для ASR.
+↓
+(8) gigaam_asr — GigaAM (имя модели из CLI), транскрибация turns_named → JSON-строки ASR
+    для чего: распознать текст по каждому сегменту (реплике) и получить итоговый JSON: timecodes + speaker labels + text.
+↓
+END
+
+Вне графа (функция main, после run_pipeline): при USE_LLM и OPENAI_API_KEY — llm_speaker_correction (два прохода: разметка + refine ролей).
+для чего: пост-редактирование стенограммы (разбить слитые реплики по «—», стабилизировать/переименовать спикеров в роли) без изменения исходных слов ASR.

@@ -5,5 +5,4 @@ langgraph
 pyannote.audio
 speechbrain>=1.0.0
 hdbscan>=0.8.33
-groq>=0.11.0
 openai>=1.40.0
